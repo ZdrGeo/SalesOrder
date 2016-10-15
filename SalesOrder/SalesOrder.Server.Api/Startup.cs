@@ -13,7 +13,7 @@ namespace SalesOrder.Server.Api
         public void Configuration(IAppBuilder appBuilder)
         {
             /*
-            ContainerBuilder containerBuilder = new ContainerBuilder();
+            var containerBuilder = new ContainerBuilder();
 
             // containerBuilder.RegisterType<SalesOrderService>().As<ISalesOrderService>();
 
@@ -22,9 +22,15 @@ namespace SalesOrder.Server.Api
             appBuilder.UseAutofacMiddleware(container);
             */
 
-            HttpConfiguration httpConfiguration = new HttpConfiguration();
+            var httpConfiguration = new HttpConfiguration();
 
+            httpConfiguration.MapHttpAttributeRoutes();
             httpConfiguration.Routes.MapHttpRoute(name: "Api", routeTemplate: "api/{controller}/{id}", defaults: new { id = RouteParameter.Optional });
+
+            // httpConfiguration.Formatters.Remove(httpConfiguration.Formatters.XmlFormatter);
+            // httpConfiguration.Formatters.Add(httpConfiguration.Formatters.JsonFormatter);
+
+            // httpConfiguration.EnableSystemDiagnosticsTracing();
 
             appBuilder.UseWebApi(httpConfiguration);
         }

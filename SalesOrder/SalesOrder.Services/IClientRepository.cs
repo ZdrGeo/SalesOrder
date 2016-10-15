@@ -8,23 +8,15 @@ using SalesOrder.Models;
 
 namespace SalesOrder.Services
 {
-    public interface IEnlistableRepository<TUnitOfWork>
-    {
-        void Enlist(TUnitOfWork unitOfWork);
-    }
-
-    /*
     public interface IUnitOfWork
     {
-        IClientRepository ClientRepository { get; }
-        IRetailSaleRepository RetailSaleRepository { get; }
+        object Get();
         void Complete();
     }
-    */
 
-    public interface IUnitOfWork
+    public interface IUnitOfWorkFactory
     {
-        void Complete();
+        IUnitOfWork Create();
     }
 
     public interface IUnitOfWorkIsolatedFactory
@@ -32,7 +24,13 @@ namespace SalesOrder.Services
         void With(Action<IUnitOfWork> action);
     }
 
-    public interface IClientRepository<TUnitOfWork> : IEnlistableRepository<TUnitOfWork>
+    public interface IEnlistableRepository
+    {
+        void Enlist(IUnitOfWork unitOfWork);
+        void Delist();
+    }
+
+    public interface IClientRepository : IEnlistableRepository
     {
         bool ContainsWithId(string id);
         Client FindWithId(string id);

@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Owin;
 using Owin;
 
-assembly: OwinStartup(typeof(SalesOrder.Client.Startup))]
+[assembly: OwinStartup(typeof(SalesOrder.Client.Startup))]
 
 namespace SalesOrder.Client
 {

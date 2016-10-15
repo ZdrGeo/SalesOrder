@@ -11,8 +11,7 @@ using Akka.DI.Core;
 using Akka.DI.AutoFac;
 using Autofac;
 using Topshelf;
-
-using SalesOrder.Actors;
+using Topshelf.Autofac;
 
 namespace SalesOrder.Server.Api
 {
@@ -20,14 +19,24 @@ namespace SalesOrder.Server.Api
     {
         public static void Main(string[] args)
         {
-            HostFactory.Run(hostConfigurator => {
-                hostConfigurator.Service<Service>(serviceConfigurator => {
-                    serviceConfigurator.ConstructUsing(name => new Service());
-                    serviceConfigurator.WhenStarted(service => service.Start());
-                    serviceConfigurator.WhenStopped(service => service.Stop());
-                });
+            var containerBuilder = new ContainerBuilder();
 
-                hostConfigurator.RunAsLocalSystem();
+            // containerBuilder.RegisterType<Dependency>().As<IDependency>();
+
+            containerBuilder.RegisterType<Service>();
+
+            IContainer container = containerBuilder.Build();
+
+            HostFactory.Run(hostConfigurator => {
+                hostConfigurator
+                .UseAutofacContainer(container)
+                .Service<Service>(serviceConfigurator => {
+                    serviceConfigurator
+                    .ConstructUsingAutofacContainer()
+                    .WhenStarted(service => service.Start())
+                    .WhenStopped(service => service.Stop());
+                })
+                .RunAsLocalSystem();
 
                 hostConfigurator.SetDescription("SalesOrder.Server.Api Host");
                 hostConfigurator.SetDisplayName("SalesOrder.Server.Api");

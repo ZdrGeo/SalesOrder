@@ -23,7 +23,7 @@ namespace SalesOrder.Server.Api
 
         public void Start()
         {
-            ContainerBuilder containerBuilder = new ContainerBuilder();
+            var containerBuilder = new ContainerBuilder();
 
             // containerBuilder.RegisterType<SalesOrderProcessDriverActor>();
 
