@@ -22,7 +22,7 @@ namespace SalesOrder.Actors
         public bool TryLock(IActorRef lockedActor, IActorRef sessionActor, bool exclusive = false)
         {
             bool locked = false;
-
+            /*
             if (exclusive)
             {
                 Dictionary<IActorRef, bool> sessionActors = lockedActorSessionActors[lockedActor];
@@ -71,7 +71,7 @@ namespace SalesOrder.Actors
                     }
                 }
             }
-
+            */
             return locked;
         }
 
@@ -86,16 +86,12 @@ namespace SalesOrder.Actors
                     bool exclusive = sessionActors[sessionActor];
                 }
             }
-
-            lockedActorToSessionActor.Add(lockedActor, sessionActor);
-            sessionActorToLockedActor
-
-        }
+       }
 
         public void UnlockAll(IActorRef sessionActor)
         {
-            lockedActorToSessionActor.Add(lockedActor, sessionActor);
-            sessionActorToLockedActor
+            // lockedActorToSessionActor.Add(lockedActor, sessionActor);
+            // sessionActorToLockedActor
         }
     }
 
@@ -117,7 +113,7 @@ namespace SalesOrder.Actors
         {
             logger.Info("Create purchase order (Number: {0})", createSalesOrder.Number);
 
-            int id = 0;
+            string id = string.Empty;
 
             IActorRef SalesOrderActor = Context.ActorOf(Context.DI().Props<SalesOrderActor>(), $"SalesOrder-{ id }");
 
@@ -132,9 +128,9 @@ namespace SalesOrder.Actors
 
         private void DestroySalesOrder(DestroySalesOrder destroySalesOrder)
         {
-            logger.Info("Destroy purchase order (ID: {0})", destroySalesOrder.ID);
+            logger.Info("Destroy purchase order (ID: {0})", destroySalesOrder.Id);
 
-            IActorRef SalesOrderActor = Context.Child($"SalesOrder-{ destroySalesOrder.ID }");
+            IActorRef SalesOrderActor = Context.Child($"SalesOrder-{ destroySalesOrder.Id }");
 
             if (SalesOrderActor.IsNobody())
             {
@@ -145,7 +141,7 @@ namespace SalesOrder.Actors
 
             // locks.Remove(SalesOrderActor);
 
-            SalesOrderDestroyed SalesOrderDestroyed = new SalesOrderDestroyed(destroySalesOrder.ID);
+            SalesOrderDestroyed SalesOrderDestroyed = new SalesOrderDestroyed(destroySalesOrder.Id);
 
             Sender.Tell(SalesOrderDestroyed);
         }

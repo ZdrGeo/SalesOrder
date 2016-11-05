@@ -21,7 +21,7 @@ namespace SalesOrder.States
     internal class SalesOrderState
     {
         public string Id { get; set; }
-        public SalesOrderDocument SalesOrderDocument { get; set; }
+        public Document Document { get; set; }
     }
 }
 
@@ -44,7 +44,7 @@ namespace SalesOrder.Actors
         }
 
         private readonly ILoggingAdapter logger = Context.GetLogger();
-        private SalesOrderDocument SalesOrderDocument = new SalesOrderDocument();
+        private Document Document = new Document();
         private int count;
         private const int SNAPSHOT_COUNT = 10;
 
@@ -52,7 +52,7 @@ namespace SalesOrder.Actors
         {
             get
             {
-                return $"SalesOrder-{ SalesOrderDocument.Id }";
+                return $"SalesOrder-{ Document.Id }";
             }
         }
 
@@ -60,7 +60,7 @@ namespace SalesOrder.Actors
         {
             if (count == SNAPSHOT_COUNT)
             {
-                SaveSnapshot(SalesOrderDocument);
+                SaveSnapshot(Document);
                 count = 0;
             }
             else { count++; }
@@ -68,12 +68,12 @@ namespace SalesOrder.Actors
 
         private void CreateSalesOrder(CreateSalesOrder createSalesOrder)
         {
-            logger.Info("Create purchase order (ID: {0})", createSalesOrder.ID);
+            logger.Info("Create purchase order (Id: {0})", createSalesOrder.Id);
 
-            SalesOrderCreated SalesOrderCreated = new SalesOrderCreated(createSalesOrder.ID, createSalesOrder.Number);
+            SalesOrderCreated SalesOrderCreated = new SalesOrderCreated(createSalesOrder.Id, createSalesOrder.Number);
 
             Persist(SalesOrderCreated, @event => {
-                SalesOrderCreated(@event);
+                this.SalesOrderCreated(@event);
                 SaveSnapshot();
                 // Sender.Tell(SalesOrderCreated);
             });
@@ -81,12 +81,12 @@ namespace SalesOrder.Actors
 
         private void DestroySalesOrder(DestroySalesOrder destroySalesOrder)
         {
-            logger.Info("Destroy purchase order (ID: {0})", destroySalesOrder.ID);
+            logger.Info("Destroy purchase order (Id: {0})", destroySalesOrder.Id);
 
-            SalesOrderDestroyed SalesOrderDestroyed = new SalesOrderDestroyed(SalesOrderDocument.ID);
+            SalesOrderDestroyed SalesOrderDestroyed = new SalesOrderDestroyed(Document.Id);
 
             Persist(SalesOrderDestroyed, @event => {
-                SalesOrderDestroyed(@event);
+                this.SalesOrderDestroyed(@event);
                 SaveSnapshot();
                 // Sender.Tell(SalesOrderDestroyed);
             });
@@ -96,12 +96,12 @@ namespace SalesOrder.Actors
         {
             logger.Info("Add purchase order line (Number: {0})", addSalesOrderLine.Number);
 
-            int id = 0;
+            string id = string.Empty;
 
             SalesOrderLineAdded SalesOrderLineAdded = new SalesOrderLineAdded(id, addSalesOrderLine.Number);
 
             Persist(SalesOrderLineAdded, @event => {
-                SalesOrderLineAdded(@event);
+                this.SalesOrderLineAdded(@event);
                 SaveSnapshot();
                 // Sender.Tell(SalesOrderLineAdded);
             });
@@ -109,12 +109,12 @@ namespace SalesOrder.Actors
 
         private void RemoveSalesOrderLine(RemoveSalesOrderLine removeSalesOrderLine)
         {
-            logger.Info("Remove purchase order line (ID: {0})", removeSalesOrderLine.ID);
+            logger.Info("Remove purchase order line (ID: {0})", removeSalesOrderLine.Id);
 
-            SalesOrderLineRemoved SalesOrderLineRemoved = new SalesOrderLineRemoved(removeSalesOrderLine.ID);
+            SalesOrderLineRemoved SalesOrderLineRemoved = new SalesOrderLineRemoved(removeSalesOrderLine.Id);
 
             Persist(SalesOrderLineRemoved, @event => {
-                SalesOrderLineRemoved(@event);
+                this.SalesOrderLineRemoved(@event);
                 SaveSnapshot();
                 // Sender.Tell(SalesOrderLineAdded);
             });
@@ -122,8 +122,8 @@ namespace SalesOrder.Actors
 
         private void SalesOrderCreated(SalesOrderCreated SalesOrderCreated)
         {
-            SalesOrderDocument.Id = SalesOrderCreated.Id;
-            SalesOrderDocument.Number = SalesOrderCreated.Number;
+            Document.Id = SalesOrderCreated.Id;
+            Document.Number = SalesOrderCreated.Number;
         }
 
         private void SalesOrderDestroyed(SalesOrderDestroyed SalesOrderDestroyed)
@@ -133,24 +133,24 @@ namespace SalesOrder.Actors
 
         private void SalesOrderLineAdded(SalesOrderLineAdded SalesOrderLineAdded)
         {
-            SalesOrderLine SalesOrderLine = new SalesOrderLine();
+            Line line = new Line();
 
-            SalesOrderLine.Id = SalesOrderLineAdded.Id;
-            SalesOrderLine.Number = SalesOrderLineAdded.Number;
+            line.Id = SalesOrderLineAdded.Id;
+            line.Number = SalesOrderLineAdded.Number;
 
-            SalesOrderDocument.Lines.Add(SalesOrderLine);
+            Document.Lines.Add(line);
         }
 
         private void SalesOrderLineRemoved(SalesOrderLineRemoved SalesOrderLineRemoved)
         {
-            SalesOrderLine SalesOrderLine = (SalesOrderLine)SalesOrderDocument.Lines.Single(line => line.Id == SalesOrderLineRemoved.Id);
+            Line line = Document.Lines.Single(l => l.Id == SalesOrderLineRemoved.Id);
 
-            SalesOrderDocument.Lines.Remove(SalesOrderLine);
+            Document.Lines.Remove(line);
         }
 
         private void SnapshotOffered(SnapshotOffer snapshotOffer)
         {
-            SalesOrderDocument = (SalesOrderDocument)snapshotOffer.Snapshot;
+            Document = (Document)snapshotOffer.Snapshot;
         }
     }
 }

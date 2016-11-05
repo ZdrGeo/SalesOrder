@@ -7,11 +7,11 @@ namespace SalesOrder.Client.Models
     // Models returned by AccountController actions.
     public class ExternalLoginConfirmationViewModel
     {
-        Required]
-        Display(Name = "Email")]
+        [Required]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
-        Display(Name = "Hometown")]
+        [Display(Name = "Hometown")]
         public string Hometown { get; set; }
     }
 
@@ -30,15 +30,15 @@ namespace SalesOrder.Client.Models
 
     public class VerifyCodeViewModel
     {
-        Required]
+        [Required]
         public string Provider { get; set; }
 
-        Required]
-        Display(Name = "Code")]
+        [Required]
+        [Display(Name = "Code")]
         public string Code { get; set; }
         public string ReturnUrl { get; set; }
 
-        Display(Name = "Remember this browser?")]
+        [Display(Name = "Remember this browser?")]
         public bool RememberBrowser { get; set; }
 
         public bool RememberMe { get; set; }
@@ -46,65 +46,65 @@ namespace SalesOrder.Client.Models
 
     public class ForgotViewModel
     {
-        Required]
-        Display(Name = "Email")]
+        [Required]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 
     public class LoginViewModel
     {
-        Required]
-        Display(Name = "Email")]
-        EmailAddress]
+        [Required]
+        [Display(Name = "Email")]
+        [EmailAddress]
         public string Email { get; set; }
 
-        Required]
-        DataType(DataType.Password)]
-        Display(Name = "Password")]
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        Display(Name = "Remember me?")]
+        [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
 
     public class RegisterViewModel
     {
-        Required]
-        EmailAddress]
-        Display(Name = "Email")]
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
-        Required]
-        StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        DataType(DataType.Password)]
-        Display(Name = "Password")]
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        DataType(DataType.Password)]
-        Display(Name = "Confirm password")]
-        Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        Display(Name = "Hometown")]
+        [Display(Name = "Hometown")]
         public string Hometown { get; set; }
     }
 
     public class ResetPasswordViewModel
     {
-        Required]
-        EmailAddress]
-        Display(Name = "Email")]
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
-        Required]
-        StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        DataType(DataType.Password)]
-        Display(Name = "Password")]
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        DataType(DataType.Password)]
-        Display(Name = "Confirm password")]
-        Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
@@ -112,9 +112,9 @@ namespace SalesOrder.Client.Models
 
     public class ForgotPasswordViewModel
     {
-        Required]
-        EmailAddress]
-        Display(Name = "Email")]
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 }

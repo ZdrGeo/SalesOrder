@@ -15,13 +15,13 @@ namespace SalesOrder.Client.Areas.HelpPage
         public static string GetFriendlyId(this ApiDescription description)
         {
             string path = description.RelativePath;
-            string] urlParts = path.Split('?');
-            string localPath = urlParts0];
+            string[] urlParts = path.Split('?');
+            string localPath = urlParts[0];
             string queryKeyString = null;
             if (urlParts.Length > 1)
             {
-                string query = urlParts1];
-                string] queryKeys = HttpUtility.ParseQueryString(query).AllKeys;
+                string query = urlParts[1];
+                string[] queryKeys = HttpUtility.ParseQueryString(query).AllKeys;
                 queryKeyString = String.Join("_", queryKeys);
             }
 

@@ -7,8 +7,6 @@ using Akka.Actor;
 using Akka.Event;
 using Akka.DI.Core;
 
-using Document.Models;
-using SalesOrder.States;
 using SalesOrder.Messages;
 using SalesOrder.Messages.Commands;
 using SalesOrder.Messages.Events;

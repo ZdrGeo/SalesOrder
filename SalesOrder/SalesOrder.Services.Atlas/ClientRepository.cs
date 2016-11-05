@@ -302,7 +302,7 @@ namespace SalesOrder.Services.Atlas
                 {
                     if (dataReader.Read())
                     {
-                        MapClient(dataReader, client);
+                        // MapClient(dataReader, client);
                     }
                 }
             }

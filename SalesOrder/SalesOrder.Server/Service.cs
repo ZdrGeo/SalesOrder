@@ -22,14 +22,16 @@ namespace SalesOrder.Server
         {
             ContainerBuilder containerBuilder = new ContainerBuilder();
 
-            //containerBuilder.RegisterType<SalesOrderService>().As<ISalesOrderService>();
-            //containerBuilder.RegisterType<SalesOrderActor>();
-            //containerBuilder.RegisterType<SalesOrderLockActor>();
-            //containerBuilder.RegisterType<SalesOrderCollectionActor>();
-            //containerBuilder.RegisterType<SessionActor>();
-            //containerBuilder.RegisterType<SessionCollectionActor>();
-            containerBuilder.RegisterType<SalesOrderProcessActor>();
-            containerBuilder.RegisterType<SalesOrderProcessManagerActor>();
+            // containerBuilder.RegisterType<SalesOrderService>().As<ISalesOrderService>();
+            // containerBuilder.RegisterType<SalesOrderActor>();
+            // containerBuilder.RegisterType<SalesOrderLockActor>();
+            // containerBuilder.RegisterType<SalesOrderCollectionActor>();
+            // containerBuilder.RegisterType<SessionActor>();
+            // containerBuilder.RegisterType<SessionCollectionActor>();
+            // containerBuilder.RegisterType<SalesOrderProcessActor>();
+            // containerBuilder.RegisterType<SalesOrderProcessManagerActor>();
+            containerBuilder.RegisterType<RetailSaleProcessActor>();
+            containerBuilder.RegisterType<RetailSaleProcessManagerActor>();
 
             IContainer container = containerBuilder.Build();
 

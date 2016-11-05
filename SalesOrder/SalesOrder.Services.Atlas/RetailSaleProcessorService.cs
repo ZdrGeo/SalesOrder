@@ -11,23 +11,34 @@ namespace SalesOrder.Services.Atlas
 {
     public class RetailSaleProcessorService : IRetailSaleProcessorService
     {
-        public RetailSaleProcessorService(IUnitOfWorkIsolatedFactory unitOfWorkIsolatedFactory)
+        public RetailSaleProcessorService(IUnitOfWorkFactory unitOfWorkFactory, IUnitOfWorkIsolatedFactory unitOfWorkIsolatedFactory, IDocumentRepository retailSaleRepository)
         {
+            if (unitOfWorkFactory == null) { throw new ArgumentNullException("unitOfWorkFactory"); }
             if (unitOfWorkIsolatedFactory == null) { throw new ArgumentNullException("unitOfWorkIsolatedFactory"); }
+            if (retailSaleRepository == null) { throw new ArgumentNullException("retailSaleRepository"); }
 
+            this.unitOfWorkFactory = unitOfWorkFactory;
             this.unitOfWorkIsolatedFactory = unitOfWorkIsolatedFactory;
+            this.retailSaleRepository = retailSaleRepository;
         }
 
+        private IUnitOfWorkFactory unitOfWorkFactory;
         private IUnitOfWorkIsolatedFactory unitOfWorkIsolatedFactory;
+        private IDocumentRepository retailSaleRepository;
 
-        public string Create(RetailSale retailSale)
+        public string Create(Document document)
         {
             unitOfWorkIsolatedFactory.With(
                 unitOfWork =>
                 {
-                    retailSale.Id = unitOfWork.RetailSaleRepository.GetNewId();
-                    unitOfWork.RetailSaleRepository.Add(retailSale);
+                    retailSaleRepository.Enlist(unitOfWork);
+
+                    document.Id = retailSaleRepository.GetNewId();
+                    retailSaleRepository.Add(document);
+
                     unitOfWork.Complete();
+
+                    retailSaleRepository.Delist();
                 }
             );
 

@@ -46,6 +46,7 @@ namespace SalesOrder.Services.Atlas
                 }
             );
 
+            /*
             using (var unitOfWork = unitOfWorkFactory.Create())
             {
                 clientRepository.Enlist(unitOfWork);
@@ -58,6 +59,7 @@ namespace SalesOrder.Services.Atlas
 
                 clientRepository.Delist();
             }
+            */
 
             return string.Empty;
         }

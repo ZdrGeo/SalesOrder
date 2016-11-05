@@ -34,7 +34,7 @@ namespace SalesOrder.Actors
         {
             logger.Info("Create client (Name: {0})", createClient.Name);
 
-            string id = clientProcessorService.Create();
+            string id = clientProcessorService.Create(null);
 
             ClientCreated clientCreated = new ClientCreated(createClient.ProcessActor, id);
 

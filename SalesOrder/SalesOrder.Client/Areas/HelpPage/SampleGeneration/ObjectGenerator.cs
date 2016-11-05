@@ -35,7 +35,7 @@ namespace SalesOrder.Client.Areas.HelpPage
             return GenerateObject(type, new Dictionary<Type, object>());
         }
 
-        SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Here we just want to return null if anything goes wrong.")]
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Here we just want to return null if anything goes wrong.")]
         private object GenerateObject(Type type, Dictionary<Type, object> createdObjectReferences)
         {
             try
@@ -119,7 +119,7 @@ namespace SalesOrder.Client.Areas.HelpPage
                 return GenerateTuple(type, createdObjectReferences);
             }
 
-            Type] genericArguments = type.GetGenericArguments();
+            Type[] genericArguments = type.GetGenericArguments();
             if (genericArguments.Length == 1)
             {
                 if (genericTypeDefinition == typeof(IList<>) ||
@@ -135,7 +135,7 @@ namespace SalesOrder.Client.Areas.HelpPage
                     return GenerateQueryable(type, collectionSize, createdObjectReferences);
                 }
 
-                Type closedCollectionType = typeof(ICollection<>).MakeGenericType(genericArguments0]);
+                Type closedCollectionType = typeof(ICollection<>).MakeGenericType(genericArguments[0]);
                 if (closedCollectionType.IsAssignableFrom(type))
                 {
                     return GenerateCollection(type, collectionSize, createdObjectReferences);
@@ -150,7 +150,7 @@ namespace SalesOrder.Client.Areas.HelpPage
                     return GenerateDictionary(dictionaryType, collectionSize, createdObjectReferences);
                 }
 
-                Type closedDictionaryType = typeof(IDictionary<,>).MakeGenericType(genericArguments0], genericArguments1]);
+                Type closedDictionaryType = typeof(IDictionary<,>).MakeGenericType(genericArguments[0], genericArguments[1]);
                 if (closedDictionaryType.IsAssignableFrom(type))
                 {
                     return GenerateDictionary(type, collectionSize, createdObjectReferences);
@@ -167,14 +167,14 @@ namespace SalesOrder.Client.Areas.HelpPage
 
         private static object GenerateTuple(Type type, Dictionary<Type, object> createdObjectReferences)
         {
-            Type] genericArgs = type.GetGenericArguments();
-            object] parameterValues = new objectgenericArgs.Length];
+            Type[] genericArgs = type.GetGenericArguments();
+            object[] parameterValues = new object[genericArgs.Length];
             bool failedToCreateTuple = true;
             ObjectGenerator objectGenerator = new ObjectGenerator();
             for (int i = 0; i < genericArgs.Length; i++)
             {
-                parameterValuesi] = objectGenerator.GenerateObject(genericArgsi], createdObjectReferences);
-                failedToCreateTuple &= parameterValuesi] == null;
+                parameterValues[i] = objectGenerator.GenerateObject(genericArgs[i], createdObjectReferences);
+                failedToCreateTuple &= parameterValues[i] == null;
             }
             if (failedToCreateTuple)
             {
@@ -198,9 +198,9 @@ namespace SalesOrder.Client.Areas.HelpPage
 
         private static object GenerateKeyValuePair(Type keyValuePairType, Dictionary<Type, object> createdObjectReferences)
         {
-            Type] genericArgs = keyValuePairType.GetGenericArguments();
-            Type typeK = genericArgs0];
-            Type typeV = genericArgs1];
+            Type[] genericArgs = keyValuePairType.GetGenericArguments();
+            Type typeK = genericArgs[0];
+            Type typeV = genericArgs[1];
             ObjectGenerator objectGenerator = new ObjectGenerator();
             object keyObject = objectGenerator.GenerateObject(typeK, createdObjectReferences);
             object valueObject = objectGenerator.GenerateObject(typeV, createdObjectReferences);
@@ -240,9 +240,9 @@ namespace SalesOrder.Client.Areas.HelpPage
             Type typeV = typeof(object);
             if (dictionaryType.IsGenericType)
             {
-                Type] genericArgs = dictionaryType.GetGenericArguments();
-                typeK = genericArgs0];
-                typeV = genericArgs1];
+                Type[] genericArgs = dictionaryType.GetGenericArguments();
+                typeK = genericArgs[0];
+                typeV = genericArgs[1];
             }
 
             object result = Activator.CreateInstance(dictionaryType);
@@ -258,11 +258,11 @@ namespace SalesOrder.Client.Areas.HelpPage
                     return null;
                 }
 
-                bool containsKey = (bool)containsMethod.Invoke(result, new object] { newKey });
+                bool containsKey = (bool)containsMethod.Invoke(result, new object[] { newKey });
                 if (!containsKey)
                 {
                     object newValue = objectGenerator.GenerateObject(typeV, createdObjectReferences);
-                    addMethod.Invoke(result, new object] { newKey, newValue });
+                    addMethod.Invoke(result, new object[] { newKey, newValue });
                 }
             }
 
@@ -290,7 +290,7 @@ namespace SalesOrder.Client.Areas.HelpPage
             }
             else
             {
-                list = GenerateArray(typeof(object]), size, createdObjectReferences);
+                list = GenerateArray(typeof(object[]), size, createdObjectReferences);
             }
             if (list == null)
             {
@@ -299,8 +299,8 @@ namespace SalesOrder.Client.Areas.HelpPage
             if (isGeneric)
             {
                 Type argumentType = typeof(IEnumerable<>).MakeGenericType(queryableType.GetGenericArguments());
-                MethodInfo asQueryableMethod = typeof(Queryable).GetMethod("AsQueryable", new] { argumentType });
-                return asQueryableMethod.Invoke(null, new] { list });
+                MethodInfo asQueryableMethod = typeof(Queryable).GetMethod("AsQueryable", new[] { argumentType });
+                return asQueryableMethod.Invoke(null, new[] { list });
             }
 
             return Queryable.AsQueryable((IEnumerable)list);
@@ -309,7 +309,7 @@ namespace SalesOrder.Client.Areas.HelpPage
         private static object GenerateCollection(Type collectionType, int size, Dictionary<Type, object> createdObjectReferences)
         {
             Type type = collectionType.IsGenericType ?
-                collectionType.GetGenericArguments()0] :
+                collectionType.GetGenericArguments()[0] :
                 typeof(object);
             object result = Activator.CreateInstance(collectionType);
             MethodInfo addMethod = collectionType.GetMethod("Add");
@@ -318,7 +318,7 @@ namespace SalesOrder.Client.Areas.HelpPage
             for (int i = 0; i < size; i++)
             {
                 object element = objectGenerator.GenerateObject(type, createdObjectReferences);
-                addMethod.Invoke(result, new object] { element });
+                addMethod.Invoke(result, new object[] { element });
                 areAllElementsNull &= element == null;
             }
 
@@ -332,7 +332,7 @@ namespace SalesOrder.Client.Areas.HelpPage
 
         private static object GenerateNullable(Type nullableType, Dictionary<Type, object> createdObjectReferences)
         {
-            Type type = nullableType.GetGenericArguments()0];
+            Type type = nullableType.GetGenericArguments()[0];
             ObjectGenerator objectGenerator = new ObjectGenerator();
             return objectGenerator.GenerateObject(type, createdObjectReferences);
         }
@@ -360,7 +360,7 @@ namespace SalesOrder.Client.Areas.HelpPage
                     return null;
                 }
 
-                result = defaultCtor.Invoke(new object0]);
+                result = defaultCtor.Invoke(new object[0]);
             }
             createdObjectReferences.Add(type, result);
             SetPublicProperties(type, result, createdObjectReferences);
@@ -370,7 +370,7 @@ namespace SalesOrder.Client.Areas.HelpPage
 
         private static void SetPublicProperties(Type type, object obj, Dictionary<Type, object> createdObjectReferences)
         {
-            PropertyInfo] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             ObjectGenerator objectGenerator = new ObjectGenerator();
             foreach (PropertyInfo property in properties)
             {
@@ -384,7 +384,7 @@ namespace SalesOrder.Client.Areas.HelpPage
 
         private static void SetPublicFields(Type type, object obj, Dictionary<Type, object> createdObjectReferences)
         {
-            FieldInfo] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+            FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
             ObjectGenerator objectGenerator = new ObjectGenerator();
             foreach (FieldInfo field in fields)
             {
@@ -398,7 +398,7 @@ namespace SalesOrder.Client.Areas.HelpPage
             private long _index = 0;
             private static readonly Dictionary<Type, Func<long, object>> DefaultGenerators = InitializeGenerators();
 
-            SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "These are simple type factories and cannot be split up.")]
+            [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "These are simple type factories and cannot be split up.")]
             private static Dictionary<Type, Func<long, object>> InitializeGenerators()
             {
                 return new Dictionary<Type, Func<long, object>>
@@ -449,7 +449,7 @@ namespace SalesOrder.Client.Areas.HelpPage
 
             public object GenerateObject(Type type)
             {
-                return DefaultGeneratorstype](++_index);
+                return DefaultGenerators[type](++_index);
             }
         }
     }

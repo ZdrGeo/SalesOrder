@@ -10,6 +10,6 @@ namespace SalesOrder.Services
 {
     public interface IRetailSaleProcessorService
     {
-        string Create(RetailSale retailSale);
+        string Create(Document document);
     }
 }

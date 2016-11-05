@@ -34,7 +34,7 @@ namespace SalesOrder.Actors
         {
             logger.Info("Create retail sale");
 
-            string id = retailSaleProcessorService.Create();
+            string id = retailSaleProcessorService.Create(null);
 
             RetailSaleCreated retailSaleCreated = new RetailSaleCreated(createRetailSale.ProcessActor, id);
 

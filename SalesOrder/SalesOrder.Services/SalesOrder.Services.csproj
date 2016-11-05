@@ -40,8 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICreateRetailSaleUnitOfWork.cs" />
-    <Compile Include="IRetailSaleRepository.cs" />
+    <Compile Include="IDocumentRepository.cs" />
     <Compile Include="IClientRepository.cs" />
     <Compile Include="IClientProcessorService.cs" />
     <Compile Include="IRetailSaleProcessorService.cs" />

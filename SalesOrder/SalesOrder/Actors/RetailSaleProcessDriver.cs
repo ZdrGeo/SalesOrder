@@ -10,8 +10,6 @@ using Akka.Persistence;
 using Akka.Event;
 using Akka.DI.Core;
 
-using Document.State;
-using SalesOrder.State;
 using SalesOrder.Messages;
 using SalesOrder.Messages.Commands;
 using SalesOrder.Messages.Events;

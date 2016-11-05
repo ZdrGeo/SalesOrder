@@ -9,7 +9,7 @@ using SalesOrder.Models.Atlas;
 
 namespace SalesOrder.Services.Atlas
 {
-    public class RetailSaleRepository : EnlistableRepository<Models.Atlas.Atlas>, IRetailSaleRepository
+    public class DocumentRepository : EnlistableRepository<Models.Atlas.Atlas>, IDocumentRepository
     {
         public bool ContainsWithId(string id)
         {
@@ -22,7 +22,7 @@ namespace SalesOrder.Services.Atlas
             return UnitOfWork.ST_CDocs.Any(st_cd => st_cd.FirmID == firmId && st_cd.BranchID == branchId && st_cd.DocID == docId);
         }
 
-        public RetailSale FindWithId(string id)
+        public Document FindWithId(string id)
         {
             EnsureEnlisted();
 
@@ -32,9 +32,9 @@ namespace SalesOrder.Services.Atlas
 
             ST_CDocs ST_CDocs = UnitOfWork.ST_CDocs.First(st_cd => st_cd.FirmID == firmId && st_cd.BranchID == branchId && st_cd.DocID == docId);
 
-            RetailSale retailSale = new RetailSale();
+            Document document = new Document();
 
-            return retailSale;
+            return document;
         }
 
         public string GetNewId()
@@ -61,18 +61,18 @@ namespace SalesOrder.Services.Atlas
             return docId.ToString();
         }
 
-        public void Add(RetailSale retailSale)
+        public void Add(Document document)
         {
             EnsureEnlisted();
 
-            int docId = int.Parse(retailSale.Id);
+            int docId = int.Parse(document.Id);
 
             ST_CDocs st_CDocs = new ST_CDocs();
 
             st_CDocs.FirmID = 1;
             st_CDocs.BranchID = 1;
             st_CDocs.DocID = docId;
-            st_CDocs.V3_S1 = retailSale.Number;
+            st_CDocs.V3_S1 = document.Number;
 
             UnitOfWork.ST_CDocs.Add(st_CDocs);
         }

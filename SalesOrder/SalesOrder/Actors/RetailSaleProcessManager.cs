@@ -66,9 +66,9 @@ namespace SalesOrder.Actors
 
         private void ClientStored(ClientStored clientStored)
         {
-            CreateRetailSale createRetailSale = new CreateRetailSale(clientStored.ProcessActor);
+            // CreateRetailSale createRetailSale = new CreateRetailSale(clientStored.ProcessActor);
 
-            retailSaleProcessorActor.Tell(createRetailSale);
+            // retailSaleProcessorActor.Tell(createRetailSale);
         }
 
         private void RetailSaleCreated(RetailSaleCreated retailSaleCreated)
@@ -80,7 +80,7 @@ namespace SalesOrder.Actors
 
         private void RetailSaleStored(RetailSaleStored retailSaleStored)
         {
-            CreateProcess(retailSaleStored.ProcessActor);
+            // CreateProcess(retailSaleStored.Id, retailSaleStored.ProcessActor);
         }
 
         protected override void OnCreateProcess(IActorRef actor)

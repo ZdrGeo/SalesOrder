@@ -2,45 +2,45 @@ namespace SalesOrder.Messages.Events
 {
     public class SalesOrderCreated : Event
     {
-        public SalesOrderCreated(int id, string number)
+        public SalesOrderCreated(string id, string number)
         {
             Id = id;
             Number = number;
         }
 
-        public int Id { get; }
+        public string Id { get; }
         public string Number { get; }
     }
 
     public class SalesOrderDestroyed : Event
     {
-        public SalesOrderDestroyed(int id)
+        public SalesOrderDestroyed(string id)
         {
             Id = id;
         }
 
-        public int Id { get; }
+        public string Id { get; }
     }
 
     public class SalesOrderLineAdded : Event
     {
-        public SalesOrderLineAdded(int id, string number)
+        public SalesOrderLineAdded(string id, string number)
         {
             Id = id;
             Number = number;
         }
 
-        public int Id { get; }
+        public string Id { get; }
         public string Number { get; }
     }
 
     public class SalesOrderLineRemoved : Event
     {
-        public SalesOrderLineRemoved(int id)
+        public SalesOrderLineRemoved(string id)
         {
             Id = id;
         }
 
-        public int Id { get; }
+        public string Id { get; }
     }
 }

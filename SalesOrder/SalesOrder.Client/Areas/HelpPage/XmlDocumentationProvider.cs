@@ -103,10 +103,10 @@ namespace SalesOrder.Client.Areas.HelpPage
         private static string GetMemberName(MethodInfo method)
         {
             string name = String.Format(CultureInfo.InvariantCulture, "{0}.{1}", GetTypeName(method.DeclaringType), method.Name);
-            ParameterInfo] parameters = method.GetParameters();
+            ParameterInfo[] parameters = method.GetParameters();
             if (parameters.Length != 0)
             {
-                string] parameterTypeNames = parameters.Select(param => GetTypeName(param.ParameterType)).ToArray();
+                string[] parameterTypeNames = parameters.Select(param => GetTypeName(param.ParameterType)).ToArray();
                 name += String.Format(CultureInfo.InvariantCulture, "({0})", String.Join(",", parameterTypeNames));
             }
 
@@ -141,12 +141,12 @@ namespace SalesOrder.Client.Areas.HelpPage
             {
                 // Format the generic type name to something like: Generic{System.Int32,System.String}
                 Type genericType = type.GetGenericTypeDefinition();
-                Type] genericArguments = type.GetGenericArguments();
+                Type[] genericArguments = type.GetGenericArguments();
                 string genericTypeName = genericType.FullName;
 
                 // Trim the generic parameter counts from the name
                 genericTypeName = genericTypeName.Substring(0, genericTypeName.IndexOf('`'));
-                string] argumentTypeNames = genericArguments.Select(t => GetTypeName(t)).ToArray();
+                string[] argumentTypeNames = genericArguments.Select(t => GetTypeName(t)).ToArray();
                 name = String.Format(CultureInfo.InvariantCulture, "{0}{{{1}}}", genericTypeName, String.Join(",", argumentTypeNames));
             }
             if (type.IsNested)

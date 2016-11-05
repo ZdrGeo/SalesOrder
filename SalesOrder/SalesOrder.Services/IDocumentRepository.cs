@@ -8,11 +8,11 @@ using SalesOrder.Models;
 
 namespace SalesOrder.Services
 {
-    public interface IRetailSaleRepository
+    public interface IDocumentRepository : IEnlistableRepository
     {
         bool ContainsWithId(string id);
-        RetailSale FindWithId(string id);
+        Document FindWithId(string id);
         string GetNewId();
-        void Add(RetailSale retailSale);
+        void Add(Document document);
     }
 }

@@ -151,14 +151,14 @@ namespace SalesOrder.Client.Areas.HelpPage.ModelDescriptions
 
             if (modelType.IsGenericType)
             {
-                Type] genericArguments = modelType.GetGenericArguments();
+                Type[] genericArguments = modelType.GetGenericArguments();
 
                 if (genericArguments.Length == 1)
                 {
                     Type enumerableType = typeof(IEnumerable<>).MakeGenericType(genericArguments);
                     if (enumerableType.IsAssignableFrom(modelType))
                     {
-                        return GenerateCollectionModelDescription(modelType, genericArguments0]);
+                        return GenerateCollectionModelDescription(modelType, genericArguments[0]);
                     }
                 }
                 if (genericArguments.Length == 2)
@@ -166,13 +166,13 @@ namespace SalesOrder.Client.Areas.HelpPage.ModelDescriptions
                     Type dictionaryType = typeof(IDictionary<,>).MakeGenericType(genericArguments);
                     if (dictionaryType.IsAssignableFrom(modelType))
                     {
-                        return GenerateDictionaryModelDescription(modelType, genericArguments0], genericArguments1]);
+                        return GenerateDictionaryModelDescription(modelType, genericArguments[0], genericArguments[1]);
                     }
 
                     Type keyValuePairType = typeof(KeyValuePair<,>).MakeGenericType(genericArguments);
                     if (keyValuePairType.IsAssignableFrom(modelType))
                     {
-                        return GenerateKeyValuePairModelDescription(modelType, genericArguments0], genericArguments1]);
+                        return GenerateKeyValuePairModelDescription(modelType, genericArguments[0], genericArguments[1]);
                     }
                 }
             }
@@ -333,7 +333,7 @@ namespace SalesOrder.Client.Areas.HelpPage.ModelDescriptions
 
             GeneratedModels.Add(complexModelDescription.Name, complexModelDescription);
             bool hasDataContractAttribute = modelType.GetCustomAttribute<DataContractAttribute>() != null;
-            PropertyInfo] properties = modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] properties = modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (PropertyInfo property in properties)
             {
                 if (ShouldDisplayMember(property, hasDataContractAttribute))
@@ -354,7 +354,7 @@ namespace SalesOrder.Client.Areas.HelpPage.ModelDescriptions
                 }
             }
 
-            FieldInfo] fields = modelType.GetFields(BindingFlags.Public | BindingFlags.Instance);
+            FieldInfo[] fields = modelType.GetFields(BindingFlags.Public | BindingFlags.Instance);
             foreach (FieldInfo field in fields)
             {
                 if (ShouldDisplayMember(field, hasDataContractAttribute))

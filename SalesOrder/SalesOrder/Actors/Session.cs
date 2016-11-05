@@ -7,8 +7,6 @@ using Akka.Actor;
 using Akka.Event;
 using Akka.DI.Core;
 
-using Document.State;
-using SalesOrder.State;
 using SalesOrder.Messages;
 using SalesOrder.Messages.Commands;
 using SalesOrder.Messages.Events;
@@ -42,7 +40,7 @@ namespace SalesOrder.Actors
         {
             logger.Info("Destroy session (ID: {0})", destroySession.ID);
 
-            ReleaseLock releaseLock = new ReleaseLock(Self);
+            ReleaseLock releaseLock = new ReleaseLock(Self, ActorRefs.Nobody);
 
             SalesOrderCollectionActor.Tell(releaseLock);
 
