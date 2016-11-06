@@ -22,6 +22,7 @@ namespace SalesOrder.Actors
         public bool TryLock(IActorRef lockedActor, IActorRef sessionActor, bool exclusive = false)
         {
             bool locked = false;
+
             /*
             if (exclusive)
             {
@@ -72,6 +73,7 @@ namespace SalesOrder.Actors
                 }
             }
             */
+
             return locked;
         }
 
@@ -163,6 +165,8 @@ namespace SalesOrder.Actors
             ReleaseLocks releaseLocks = new ReleaseLocks(ActorRefs.Nobody);
 
             cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(20), Self, releaseLocks, Self);
+
+            base.PreStart();
         }
 
         protected override void PostStop()

@@ -106,12 +106,13 @@
     <Compile Include="Actors\SalesOrderCollection.cs" />
     <Compile Include="Actors\RetailSaleProcess.cs" />
     <Compile Include="Actors\ProcessManager.cs" />
-    <Compile Include="Actors\RetailSaleProcessDriver.cs" />
+    <Compile Include="Actors\RetailSaleDistributor.cs" />
     <Compile Include="Actors\RetailSaleProcessManager.cs" />
     <Compile Include="Actors\SalesOrderLock.cs" />
     <Compile Include="Actors\ClientProcessor.cs" />
     <Compile Include="Actors\Session.cs" />
     <Compile Include="Actors\SessionCollection.cs" />
+    <Compile Include="Messages\RetailSaleDistributor.cs" />
     <Compile Include="Messages\RetailSaleProcessor.cs" />
     <Compile Include="Messages\Commands\Session.cs" />
     <Compile Include="Messages\Commands\Command.cs" />

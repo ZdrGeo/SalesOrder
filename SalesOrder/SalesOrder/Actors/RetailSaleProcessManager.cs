@@ -25,7 +25,7 @@ namespace SalesOrder.Actors
             clientProcessorActor = Context.ActorOf(Context.DI().Props<ClientProcessorActor>(), $"ClientProcessor-{ 0 }");
             retailSaleProcessorActor = Context.ActorOf(Context.DI().Props<RetailSaleProcessorActor>(), $"RetailSaleProcessor-{ 0 }");
 
-            Receive<ProcessRetailSale>(message => ProcessRetailSale(message));
+            Receive<DeliverAtLeastOnce<ProcessRetailSale>>(message => ProcessRetailSale(message));
             Receive<RetailSaleProcessCreated>(message => RetailSaleProcessCreated(message));
             Receive<ClientCreated>(message => ClientCreated(message));
             Receive<ClientStored>(message => ClientStored(message));
@@ -37,9 +37,11 @@ namespace SalesOrder.Actors
         private IActorRef clientProcessorActor;
         private IActorRef retailSaleProcessorActor;
 
-        private void ProcessRetailSale(ProcessRetailSale processRetailSale)
+        private void ProcessRetailSale(DeliverAtLeastOnce<ProcessRetailSale> deliverAtLeastOnce)
         {
-            logger.Info("Process retail sale (Id: {0})", processRetailSale.Id);
+            logger.Info("Process retail sale (Id: {0})", deliverAtLeastOnce.Message.Id);
+
+            Sender.Tell(new AtLeastOnceDelivered(deliverAtLeastOnce.DeliveryId));
 
             string processId = string.Empty;
 

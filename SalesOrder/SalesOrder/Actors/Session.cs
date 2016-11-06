@@ -54,6 +54,8 @@ namespace SalesOrder.Actors
             DestroySession destroySession = new DestroySession(string.Empty);
 
             cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(20), Self, destroySession, ActorRefs.NoSender);
+
+            base.PreStart();
         }
 
         protected override void PostStop()
