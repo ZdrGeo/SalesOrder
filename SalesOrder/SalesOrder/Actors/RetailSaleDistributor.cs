@@ -20,7 +20,7 @@ namespace SalesOrder.Actors
 {
     public class RetailSaleDistributorActor : AtLeastOnceDeliveryReceiveActor
     {
-        public RetailSaleDistributorActor(ActorSystem actorSystem)
+        public RetailSaleDistributorActor()
         {
             Command<DistributeRetailSale>(command => DistributeRetailSale(command));
             Command<AtLeastOnceDelivered>(command => AtLeastOnceDelivered(command));
@@ -47,6 +47,10 @@ namespace SalesOrder.Actors
             Deliver(actor.Path, deliveryId => new DeliverAtLeastOnce<DistributeRetailSale>(deliveryId, distributeRetailSale));
 
             SaveSnapshot(GetDeliverySnapshot());
+
+            RetailSaleDistributed retailSaleDistributed = new RetailSaleDistributed(distributeRetailSale.RetailSaleId);
+
+            Sender.Tell(retailSaleDistributed);
         }
 
         private void AtLeastOnceDelivered(AtLeastOnceDelivered atLeastOnceDelivered)

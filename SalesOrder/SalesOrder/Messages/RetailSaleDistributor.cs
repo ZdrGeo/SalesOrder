@@ -11,4 +11,13 @@ namespace SalesOrder.Messages
 
         public string RetailSaleId { get; }
     }
+    public class RetailSaleDistributed : Message
+    {
+        public RetailSaleDistributed(string retailSaleId)
+        {
+            RetailSaleId = retailSaleId;
+        }
+
+        public string RetailSaleId { get; }
+    }
 }
