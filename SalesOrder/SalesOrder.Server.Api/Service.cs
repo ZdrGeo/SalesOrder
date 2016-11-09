@@ -25,7 +25,7 @@ namespace SalesOrder.Server.Api
         {
             var containerBuilder = new ContainerBuilder();
 
-            // containerBuilder.RegisterType<SalesOrderProcessDriverActor>();
+            // containerBuilder.RegisterType<SalesOrderDistributorActor>();
 
             IContainer container = containerBuilder.Build();
 
