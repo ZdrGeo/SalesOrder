@@ -22,6 +22,8 @@ namespace SalesOrder.Actors
     {
         public RetailSaleDistributorActor()
         {
+            // actor = Context.ActorOf<>();
+
             Command<DistributeRetailSale>(command => DistributeRetailSale(command));
             Command<AtLeastOnceDelivered>(command => AtLeastOnceDelivered(command));
             Command<SaveSnapshotSuccess>(command => SaveSnapshotSuccess(command));
@@ -38,15 +40,15 @@ namespace SalesOrder.Actors
         {
             get
             {
-                return "RetailSaleDistributor";
+                return $"RetailSaleDistributor-{ 0 }";
             }
         }
 
         private void DistributeRetailSale(DistributeRetailSale distributeRetailSale)
         {
-            Deliver(actor.Path, deliveryId => new DeliverAtLeastOnce<DistributeRetailSale>(deliveryId, distributeRetailSale));
+            // Deliver(actor.Path, deliveryId => new DeliverAtLeastOnce<DistributeRetailSale>(deliveryId, distributeRetailSale));
 
-            SaveSnapshot(GetDeliverySnapshot());
+            // SaveSnapshot(GetDeliverySnapshot());
 
             RetailSaleDistributed retailSaleDistributed = new RetailSaleDistributed(distributeRetailSale.RetailSaleId);
 
@@ -77,9 +79,7 @@ namespace SalesOrder.Actors
 
         protected override void PreStart()
         {
-            DestroySession destroySession = new DestroySession(string.Empty);
-
-            cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(20), Self, destroySession, ActorRefs.NoSender);
+            // cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(20), Self, null, ActorRefs.NoSender);
 
             base.PreStart();
         }

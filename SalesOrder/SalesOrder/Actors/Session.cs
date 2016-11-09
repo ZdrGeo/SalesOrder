@@ -17,11 +17,11 @@ namespace SalesOrder.Actors
     {
         private readonly ILoggingAdapter logger = Context.GetLogger();
         private ICancelable cancelable;
-        private IActorRef SalesOrderCollectionActor;
+        // private IActorRef SalesOrderCollectionActor;
 
         public SessionActor()
         {
-            SalesOrderCollectionActor = Context.ActorSelection("/SalesOrderCollection").ResolveOne(TimeSpan.FromSeconds(10)).Result;
+            // SalesOrderCollectionActor = Context.ActorSelection("/SalesOrderCollection").ResolveOne(TimeSpan.FromSeconds(10)).Result;
 
             Receive<CreateSession>(message => CreateSession(message));
             Receive<DestroySession>(message => DestroySession(message));
@@ -29,31 +29,29 @@ namespace SalesOrder.Actors
 
         private void CreateSession(CreateSession createSession)
         {
-            logger.Info("Create session (ID: {0}, UserID: {1})", createSession.ID, createSession.UserID);
+            logger.Info("Create session (ID: {0}, UserID: {1})", createSession.Id, createSession.UserId);
 
-            SessionCreated sessionCreated = new SessionCreated(createSession.ID);
+            SessionCreated sessionCreated = new SessionCreated(createSession.Id, Self);
 
             Sender.Tell(sessionCreated);
         }
 
         private void DestroySession(DestroySession destroySession)
         {
-            logger.Info("Destroy session (ID: {0})", destroySession.ID);
+            logger.Info("Destroy session (ID: {0})", destroySession.Id);
 
-            ReleaseLock releaseLock = new ReleaseLock(Self, ActorRefs.Nobody);
+            // ReleaseLock releaseLock = new ReleaseLock(Self, ActorRefs.Nobody);
 
-            SalesOrderCollectionActor.Tell(releaseLock);
+            // SalesOrderCollectionActor.Tell(releaseLock);
 
-            SessionDestroyed sessionDestroyed = new SessionDestroyed(destroySession.ID);
-
-            Sender.Tell(sessionDestroyed);
+            Context.Stop(Self);
         }
 
         protected override void PreStart()
         {
             DestroySession destroySession = new DestroySession(string.Empty);
 
-            cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(20), Self, destroySession, ActorRefs.NoSender);
+            cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(20), Self, destroySession, ActorRefs.NoSender);
 
             base.PreStart();
         }

@@ -37,7 +37,6 @@ namespace SalesOrder.Client.Actors
             */
 
             Receive<SessionCreated>(message => SessionCreated(message));
-            Receive<SessionDestroyed>(message => SessionDestroyed(message));
 
             /*
             Receive<SalesOrderCreated>(message => SalesOrderCreated(message));
@@ -96,11 +95,6 @@ namespace SalesOrder.Client.Actors
         public void SessionCreated(SessionCreated sessionCreated)
         {
             SalesOrderEventSource.SessionCreated(sessionCreated);
-        }
-
-        public void SessionDestroyed(SessionDestroyed sessionDestroyed)
-        {
-            SalesOrderEventSource.SessionDestroyed(sessionDestroyed);
         }
 
         /*

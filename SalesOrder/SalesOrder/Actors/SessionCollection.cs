@@ -20,29 +20,33 @@ namespace SalesOrder.Actors
         public SessionCollectionActor()
         {
             Receive<CreateSession>(message => CreateSession(message));
-            Receive<DestroySession>(message => DestroySession(message));
+            Receive<FindSession>(message => FindSession(message));
         }
 
         private void CreateSession(CreateSession createSession)
         {
-            logger.Info("Create session (ID: {0}, UserID: {1})", createSession.ID, createSession.UserID);
+            logger.Info("Create session (ID: {0}, UserID: {1})", createSession.Id, createSession.UserId);
 
-            IActorRef sessionActor = Context.ActorOf(Context.DI().Props<SessionActor>(), $"Session-{ createSession.ID }");
+            IActorRef sessionActor = Context.ActorOf(Context.DI().Props<SessionActor>(), $"Session-{ createSession.Id }");
 
             sessionActor.Forward(createSession);
 
-            SessionCreated sessionCreated = new SessionCreated(createSession.ID);
+            /*
+            SessionCreated sessionCreated = new SessionCreated(createSession.ID, sessionActor);
 
             Sender.Tell(sessionCreated);
+            */
         }
 
-        private void DestroySession(DestroySession destroySession)
+        private void FindSession(FindSession findSession)
         {
-            logger.Info("Destroy session (ID: {0})", destroySession.ID);
+            logger.Info("Find session (ID: {0})", findSession.Id);
 
-            SessionDestroyed sessionDestroyed = new SessionDestroyed(destroySession.ID);
+            IActorRef sessionActor = Context.Child($"Session-{ findSession.Id }");
 
-            Sender.Tell(sessionDestroyed);
+            SessionFound sessionFound = new SessionFound(findSession.Id, sessionActor);
+
+            Sender.Tell(sessionFound);
         }
     }
 }

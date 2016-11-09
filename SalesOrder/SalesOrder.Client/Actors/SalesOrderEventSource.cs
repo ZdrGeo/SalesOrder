@@ -16,7 +16,6 @@ namespace SalesOrder.Client.Actors
     public interface ISalesOrderEventSource
     {
         void SessionCreated(SessionCreated sessionCreated);
-        void SessionDestroyed(SessionDestroyed sessionDestroyed);
         /*
         void SalesOrderCreated(SalesOrderCreated SalesOrderCreated);
         void SalesOrderDestroyed(SalesOrderDestroyed SalesOrderDestroyed);
@@ -36,12 +35,7 @@ namespace SalesOrder.Client.Actors
 
         public void SessionCreated(SessionCreated sessionCreated)
         {
-            hubContext.Clients.Client(sessionCreated.ID).sessionCreated();
-        }
-
-        public void SessionDestroyed(SessionDestroyed sessionDestroyed)
-        {
-            hubContext.Clients.Client(sessionDestroyed.ID).sessionDestroyed();
+            hubContext.Clients.Client(sessionCreated.Id).sessionCreated();
         }
 
         /*

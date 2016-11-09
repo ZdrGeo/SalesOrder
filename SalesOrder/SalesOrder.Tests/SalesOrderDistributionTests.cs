@@ -17,9 +17,7 @@ namespace SalesOrder.Tests
 
             actor.Tell(distributeRetailSale);
 
-            RetailSaleDistributed retailSaleDistributed = ExpectMsg< RetailSaleDistributed>();
-
-            Assert.Equal(distributeRetailSale.RetailSaleId, retailSaleDistributed.RetailSaleId);
+            RetailSaleDistributed retailSaleDistributed = ExpectMsg<RetailSaleDistributed>(message => message.RetailSaleId == distributeRetailSale.RetailSaleId);
         }
     }
 }

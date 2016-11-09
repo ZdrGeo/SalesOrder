@@ -14,43 +14,57 @@ namespace SalesOrder.Messages
 
     public class CreateSession : Message
     {
-        public CreateSession(string id, string userID)
+        public CreateSession(string id, string userId)
         {
-            ID = id;
-            UserID = userID;
+            Id = id;
+            UserId = userId;
         }
 
-        public string ID { get; }
-        public string UserID { get; }
+        public string Id { get; }
+        public string UserId { get; }
+    }
+
+    public class SessionCreated : Message
+    {
+        public SessionCreated(string id, IActorRef sessionActor)
+        {
+            Id = id;
+            SessionActor = sessionActor;
+        }
+
+        public string Id { get; }
+        public IActorRef SessionActor { get; }
     }
 
     public class DestroySession : Message
     {
         public DestroySession(string id)
         {
-            ID = id;
+            Id = id;
         }
 
-        public string ID { get; }
+        public string Id { get; }
     }
 
-    public class SessionCreated : Message
+    public class FindSession
     {
-        public SessionCreated(string id)
+        public FindSession(string id)
         {
-            ID = id;
+            Id = id;
         }
 
-        public string ID { get; }
+        public string Id { get; }
     }
 
-    public class SessionDestroyed : Message
+    public class SessionFound
     {
-        public SessionDestroyed(string id)
+        public SessionFound(string id, IActorRef sessionActor)
         {
-            ID = id;
+            Id = id;
+            SessionActor = sessionActor;
         }
 
-        public string ID { get; }
+        public string Id { get; }
+        public IActorRef SessionActor { get; }
     }
 }
