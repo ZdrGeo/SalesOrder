@@ -17,6 +17,8 @@ namespace SalesOrder.Actors
     {
         private readonly ILoggingAdapter logger = Context.GetLogger();
         private ICancelable cancelable;
+        private string sessionId;
+        private string userId;
         // private IActorRef SalesOrderCollectionActor;
 
         public SessionActor()
@@ -29,29 +31,39 @@ namespace SalesOrder.Actors
 
         private void CreateSession(CreateSession createSession)
         {
-            logger.Info("Create session (ID: {0}, UserID: {1})", createSession.Id, createSession.UserId);
+            logger.Info("Create session (Session Id: {0}, User Id: {1})", createSession.SessionId, createSession.UserId);
 
-            SessionCreated sessionCreated = new SessionCreated(createSession.Id, Self);
+            sessionId = createSession.SessionId;
+            userId = createSession.UserId;
+
+            SessionCreated sessionCreated = new SessionCreated(createSession.SessionId, Self);
 
             Sender.Tell(sessionCreated);
         }
 
         private void DestroySession(DestroySession destroySession)
         {
-            logger.Info("Destroy session (ID: {0})", destroySession.Id);
+            logger.Info("Destroy session (Session Id: {0})", sessionId);
 
-            // ReleaseLock releaseLock = new ReleaseLock(Self, ActorRefs.Nobody);
+            // ReleaseLock releaseLock = new ReleaseLock(sessionId, Self, ActorRefs.Nobody);
 
             // SalesOrderCollectionActor.Tell(releaseLock);
+
+            if (!Sender.IsNobody())
+            {
+                SessionDestroyed sessionDestroyed = new SessionDestroyed(sessionId);
+
+                Sender.Tell(sessionDestroyed);
+            }
 
             Context.Stop(Self);
         }
 
         protected override void PreStart()
         {
-            DestroySession destroySession = new DestroySession(string.Empty);
+            DestroySession destroySession = new DestroySession();
 
-            cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(20), Self, destroySession, ActorRefs.NoSender);
+            cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(20), Self, destroySession, ActorRefs.Nobody);
 
             base.PreStart();
         }

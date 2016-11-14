@@ -25,21 +25,19 @@ namespace SalesOrder.Actors
 
         private void CreateSession(CreateSession createSession)
         {
-            logger.Info("Create session (ID: {0}, UserID: {1})", createSession.Id, createSession.UserId);
-
-            // IActorRef sessionActor = Context.ActorOf(Context.DI().Props<SessionActor>(), $"session-{ createSession.Id }");
-            IActorRef sessionActor = Context.ActorOf(Props.Create<SessionActor>(), $"session-{ createSession.Id }");
+            // IActorRef sessionActor = Context.ActorOf(Context.DI().Props<SessionActor>(), $"session-{ createSession.SessionId }");
+            IActorRef sessionActor = Context.ActorOf(Props.Create<SessionActor>(), $"session-{ createSession.SessionId }");
 
             sessionActor.Forward(createSession);
         }
 
         private void FindSession(FindSession findSession)
         {
-            logger.Info("Find session (ID: {0})", findSession.Id);
+            logger.Info("Find session (Id: {0})", findSession.SessionId);
 
-            IActorRef sessionActor = Context.Child($"session-{ findSession.Id }");
+            IActorRef sessionActor = Context.Child($"session-{ findSession.SessionId }");
 
-            SessionFound sessionFound = new SessionFound(findSession.Id, sessionActor);
+            SessionFound sessionFound = new SessionFound(findSession.SessionId, sessionActor);
 
             Sender.Tell(sessionFound);
         }

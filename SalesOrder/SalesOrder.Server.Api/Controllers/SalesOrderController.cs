@@ -17,16 +17,17 @@ namespace SalesOrder.Server.Api.Controllers
         {
             for (int index = 0; index < 10; index++)
             {
-                string id = $"{ index }";
+                string sessionId = $"{ index }";
+                string userId = $"{ index }";
 
-                //SessionFound sessionFound = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionFound>(new FindSession(id), TimeSpan.FromSeconds(2));
+                SessionFound sessionFound = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionFound>(new FindSession(sessionId), TimeSpan.FromSeconds(2));
 
-                //if (sessionFound.SessionActor.IsNobody())
-                //{
-                //    SessionCreated sessionCreated = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionCreated>(new CreateSession(id, string.Empty), TimeSpan.FromSeconds(2));
-                //}
+                if (sessionFound.SessionActor.IsNobody())
+                {
+                    SessionCreated sessionCreated = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionCreated>(new CreateSession(sessionId, userId), TimeSpan.FromSeconds(2));
+                }
 
-                SalesOrderActorSystem.SessionRouterActor.Tell(new CreateSession(id, string.Empty));
+                // SessionCreated sessionCreated = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionCreated>(new CreateSession(sessionId, userId), TimeSpan.FromSeconds(2));
             }
 
             return new string[] { "value1", "value2" };

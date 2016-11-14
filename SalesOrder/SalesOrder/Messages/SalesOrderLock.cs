@@ -4,7 +4,7 @@ namespace SalesOrder.Messages
 {
     public class LockSalesOrder : SessionMessage
     {
-        public LockSalesOrder(IActorRef sessionActor, bool edit = false) : base (sessionActor)
+        public LockSalesOrder(string sessionId, IActorRef sessionActor, bool edit = false) : base (sessionId, sessionActor)
         {
             Edit = edit;
         }
@@ -14,6 +14,6 @@ namespace SalesOrder.Messages
 
     public class UnlockSalesOrder : SessionMessage
     {
-        public UnlockSalesOrder(IActorRef sessionActor) : base (sessionActor) { }
+        public UnlockSalesOrder(string sessionId, IActorRef sessionActor) : base (sessionId, sessionActor) { }
     }
 }

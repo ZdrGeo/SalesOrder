@@ -35,7 +35,7 @@ namespace SalesOrder.Client.Actors
 
         public void SessionCreated(SessionCreated sessionCreated)
         {
-            hubContext.Clients.Client(sessionCreated.Id).sessionCreated();
+            hubContext.Clients.Client(sessionCreated.SessionId).sessionCreated();
         }
 
         /*

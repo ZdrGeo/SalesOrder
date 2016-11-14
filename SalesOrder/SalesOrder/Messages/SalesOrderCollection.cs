@@ -4,7 +4,7 @@ namespace SalesOrder.Messages
 {
     public class ReleaseLock : SessionMessage
     {
-        public ReleaseLock(IActorRef lockedActor, IActorRef sessionActor) : base (sessionActor)
+        public ReleaseLock(IActorRef lockedActor, string sessionId, IActorRef sessionActor) : base (sessionId, sessionActor)
         {
             LockedActor = lockedActor;
         }
@@ -14,6 +14,6 @@ namespace SalesOrder.Messages
 
     public class ReleaseLocks : SessionMessage
     {
-        public ReleaseLocks(IActorRef sessionActor) : base (sessionActor) { }
+        public ReleaseLocks(string sessionId, IActorRef sessionActor) : base (sessionId, sessionActor) { }
     }
 }

@@ -4,7 +4,7 @@ namespace SalesOrder.Messages.Commands
 {
     public class CreateSalesOrder : SessionCommand
     {
-        public CreateSalesOrder(IActorRef sessionActor, string id, string number) : base (sessionActor)
+        public CreateSalesOrder(string sessionId, IActorRef sessionActor, string id, string number) : base (sessionId, sessionActor)
         {
             Id = id;
             Number = number;
@@ -16,7 +16,7 @@ namespace SalesOrder.Messages.Commands
 
     public class DestroySalesOrder : SessionCommand
     {
-        public DestroySalesOrder(IActorRef sessionActor, string id) : base (sessionActor)
+        public DestroySalesOrder(string sessionId, IActorRef sessionActor, string id) : base (sessionId, sessionActor)
         {
             Id = id;
         }
@@ -26,7 +26,7 @@ namespace SalesOrder.Messages.Commands
 
     public class AddSalesOrderLine : SessionCommand
     {
-        public AddSalesOrderLine(IActorRef sessionActor, string number) : base (sessionActor)
+        public AddSalesOrderLine(string sessionId, IActorRef sessionActor, string number) : base (sessionId, sessionActor)
         {
             Number = number;
         }
@@ -36,7 +36,7 @@ namespace SalesOrder.Messages.Commands
 
     public class RemoveSalesOrderLine : SessionCommand
     {
-        public RemoveSalesOrderLine(IActorRef sessionActor, string id) : base (sessionActor)
+        public RemoveSalesOrderLine(string sessionId, IActorRef sessionActor, string id) : base (sessionId, sessionActor)
         {
             Id = id;
         }

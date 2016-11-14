@@ -1,70 +1,64 @@
+using System;
 using Akka.Actor;
+using Akka.Routing;
 
 namespace SalesOrder.Messages
 {
-    public abstract class SessionMessage : Message
+    public abstract class ConsistentHashableMessage : Message, IConsistentHashable
     {
-        public SessionMessage(IActorRef sessionActor)
+        public ConsistentHashableMessage(string sessionId)
+        {
+            SessionId = sessionId;
+        }
+
+        public string SessionId { get; }
+
+        public object ConsistentHashKey => SessionId;
+    }
+
+    public abstract class SessionMessage : ConsistentHashableMessage
+    {
+        public SessionMessage(string sessionId, IActorRef sessionActor) : base (sessionId)
         {
             SessionActor = sessionActor;
         }
 
-        public IActorRef SessionActor { get; private set; }
+        public IActorRef SessionActor { get; }
     }
 
-    public class CreateSession : Message
+    public class CreateSession : ConsistentHashableMessage
     {
-        public CreateSession(string id, string userId)
+        public CreateSession(string sessionId, string userId) : base (sessionId)
         {
-            Id = id;
             UserId = userId;
         }
 
-        public string Id { get; }
         public string UserId { get; }
     }
 
-    public class SessionCreated : Message
+    public class SessionCreated : SessionMessage
     {
-        public SessionCreated(string id, IActorRef sessionActor)
-        {
-            Id = id;
-            SessionActor = sessionActor;
-        }
-
-        public string Id { get; }
-        public IActorRef SessionActor { get; }
+        public SessionCreated(string sessionId, IActorRef sessionActor) : base (sessionId, sessionActor) { }
     }
 
-    public class DestroySession : Message
+    public class DestroySession : ConsistentHashableMessage
     {
-        public DestroySession(string id)
-        {
-            Id = id;
-        }
-
-        public string Id { get; }
+        public DestroySession() : base (string.Empty) { }
+        public DestroySession(string sessionId) : base (sessionId) { }
     }
 
-    public class FindSession
+    public class SessionDestroyed : ConsistentHashableMessage
     {
-        public FindSession(string id)
-        {
-            Id = id;
-        }
-
-        public string Id { get; }
+        public SessionDestroyed(string sessionId) : base (sessionId) { }
     }
 
-    public class SessionFound
+    public class FindSession : ConsistentHashableMessage
     {
-        public SessionFound(string id, IActorRef sessionActor)
-        {
-            Id = id;
-            SessionActor = sessionActor;
-        }
+        public FindSession(string sessionId) : base (sessionId) { }
+    }
 
-        public string Id { get; }
-        public IActorRef SessionActor { get; }
+    public class SessionFound : SessionMessage
+    {
+        public SessionFound(string sessionId, IActorRef sessionActor) : base (sessionId, sessionActor) { }
     }
 }

@@ -162,7 +162,7 @@ namespace SalesOrder.Actors
 
         protected override void PreStart()
         {
-            ReleaseLocks releaseLocks = new ReleaseLocks(ActorRefs.Nobody);
+            ReleaseLocks releaseLocks = new ReleaseLocks(string.Empty, ActorRefs.Nobody);
 
             cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(20), Self, releaseLocks, Self);
 
