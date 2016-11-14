@@ -51,7 +51,7 @@ namespace SalesOrder.Actors
         {
             get
             {
-                return $"RetailSaleProcess-{ retailSaleProcessState.Id }";
+                return $"retail-sale-process-{ retailSaleProcessState.Id }";
             }
         }
 

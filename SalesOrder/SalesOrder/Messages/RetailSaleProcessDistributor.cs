@@ -2,9 +2,9 @@ using Akka.Actor;
 
 namespace SalesOrder.Messages
 {
-    public class DistributeRetailSale : Message
+    public class DistributeRetailSaleProcess : Message
     {
-        public DistributeRetailSale(string retailSaleId)
+        public DistributeRetailSaleProcess(string retailSaleId)
         {
             RetailSaleId = retailSaleId;
         }
@@ -12,9 +12,9 @@ namespace SalesOrder.Messages
         public string RetailSaleId { get; }
     }
 
-    public class RetailSaleDistributed : Message
+    public class RetailSaleProcessDistributed : Message
     {
-        public RetailSaleDistributed(string retailSaleId)
+        public RetailSaleProcessDistributed(string retailSaleId)
         {
             RetailSaleId = retailSaleId;
         }

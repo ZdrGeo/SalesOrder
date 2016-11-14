@@ -26,11 +26,11 @@ namespace SalesOrder.Client
 
             IContainer container = containerBuilder.Build();
 
-            ActorSystem = ActorSystem.Create("SalesOrder-Client");
+            ActorSystem = ActorSystem.Create("sales-order");
 
             new AutoFacDependencyResolver(container, ActorSystem);
 
-            SalesOrderBridgeActor = ActorSystem.ActorOf(ActorSystem.DI().Props<SalesOrderBridgeActor>(), "SalesOrderBridge");
+            SalesOrderBridgeActor = ActorSystem.ActorOf(ActorSystem.DI().Props<SalesOrderBridgeActor>(), "sales-order-bridge");
         }
 
         public static void Stop()

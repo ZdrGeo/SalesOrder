@@ -1,6 +1,7 @@
 ﻿using Akka.TestKit.Xunit2;
 using Xunit;
 using Akka.Actor;
+using Akka.Routing;
 using SalesOrder.Messages;
 using SalesOrder.Actors;
 using System.Threading.Tasks;
@@ -13,9 +14,9 @@ namespace SalesOrder.Tests
         [Fact]
         public async Task SessionShouldBeDistributed()
         {
-            IActorRef sessionCollectionActor = ActorOf<SessionCollectionActor>("SessionCollectionActor");
-
-            for (int index = 0; index < 10; index++)
+            IActorRef sessionCollectionActor = ActorOf<SessionCollectionActor>("session-router");
+            
+            for (int index = 0; index < 1000; index++)
             {
                 string id = $"{ index }";
 

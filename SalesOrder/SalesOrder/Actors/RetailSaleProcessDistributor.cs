@@ -18,13 +18,13 @@ using SalesOrder.Messages.Events;
 
 namespace SalesOrder.Actors
 {
-    public class RetailSaleDistributorActor : AtLeastOnceDeliveryReceiveActor
+    public class RetailSaleProcessDistributorActor : AtLeastOnceDeliveryReceiveActor
     {
-        public RetailSaleDistributorActor()
+        public RetailSaleProcessDistributorActor()
         {
             // actor = Context.ActorOf<>();
 
-            Command<DistributeRetailSale>(command => DistributeRetailSale(command));
+            Command<DistributeRetailSaleProcess>(command => DistributeRetailSaleProcess(command));
             Command<AtLeastOnceDelivered>(command => AtLeastOnceDelivered(command));
             Command<SaveSnapshotSuccess>(command => SaveSnapshotSuccess(command));
             Command<SaveSnapshotFailure>(command => SaveSnapshotFailure(command));
@@ -40,19 +40,19 @@ namespace SalesOrder.Actors
         {
             get
             {
-                return $"RetailSaleDistributor-{ 0 }";
+                return $"retail-sale-process-distributor";
             }
         }
 
-        private void DistributeRetailSale(DistributeRetailSale distributeRetailSale)
+        private void DistributeRetailSaleProcess(DistributeRetailSaleProcess distributeRetailSaleProcess)
         {
-            // Deliver(actor.Path, deliveryId => new DeliverAtLeastOnce<DistributeRetailSale>(deliveryId, distributeRetailSale));
+            // Deliver(actor.Path, deliveryId => new DeliverAtLeastOnce<DistributeRetailSaleProcess>(deliveryId, distributeRetailSale));
 
             // SaveSnapshot(GetDeliverySnapshot());
 
-            RetailSaleDistributed retailSaleDistributed = new RetailSaleDistributed(distributeRetailSale.RetailSaleId);
+            var retailSaleProcessDistributed = new RetailSaleProcessDistributed(distributeRetailSaleProcess.RetailSaleId);
 
-            Sender.Tell(retailSaleDistributed);
+            Sender.Tell(retailSaleProcessDistributed);
         }
 
         private void AtLeastOnceDelivered(AtLeastOnceDelivered atLeastOnceDelivered)

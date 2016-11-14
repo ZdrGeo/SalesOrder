@@ -16,37 +16,14 @@ namespace SalesOrder.Server
 {
     public class Service
     {
-        private ActorSystem actorSystem;
-
         public void Start()
         {
-            ContainerBuilder containerBuilder = new ContainerBuilder();
-
-            // containerBuilder.RegisterType<SalesOrderService>().As<ISalesOrderService>();
-            // containerBuilder.RegisterType<SalesOrderActor>();
-            // containerBuilder.RegisterType<SalesOrderLockActor>();
-            // containerBuilder.RegisterType<SalesOrderCollectionActor>();
-            // containerBuilder.RegisterType<SessionActor>();
-            // containerBuilder.RegisterType<SessionCollectionActor>();
-            // containerBuilder.RegisterType<SalesOrderProcessActor>();
-            // containerBuilder.RegisterType<SalesOrderProcessManagerActor>();
-            containerBuilder.RegisterType<RetailSaleProcessActor>();
-            containerBuilder.RegisterType<RetailSaleProcessManagerActor>();
-
-            IContainer container = containerBuilder.Build();
-
-            actorSystem = ActorSystem.Create("SalesOrder-Server");
-
-            new AutoFacDependencyResolver(container, actorSystem);
-
-            actorSystem.ActorOf(actorSystem.DI().Props<SalesOrderCollectionActor>(), "SalesOrderCollection");
-            actorSystem.ActorOf(actorSystem.DI().Props<SessionCollectionActor>(), "SessionCollection");
+            SalesOrderActorSystem.Start();
         }
 
         public void Stop()
         {
-            actorSystem.Shutdown();
-            actorSystem.AwaitTermination();
+            SalesOrderActorSystem.Stop();
         }
     }
 }

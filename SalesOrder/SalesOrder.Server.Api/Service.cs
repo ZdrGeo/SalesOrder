@@ -19,21 +19,10 @@ namespace SalesOrder.Server.Api
     public class Service
     {
         IDisposable disposable;
-        private ActorSystem actorSystem;
 
         public void Start()
         {
-            var containerBuilder = new ContainerBuilder();
-
-            // containerBuilder.RegisterType<SalesOrderDistributorActor>();
-
-            IContainer container = containerBuilder.Build();
-
-            actorSystem = ActorSystem.Create("SalesOrder-Server-Api");
-
-            new AutoFacDependencyResolver(container, actorSystem);
-
-            // actorSystem.ActorOf(actorSystem.DI().Props<SalesOrderProcessDriverActor>(), "SalesOrderProcessDriver");
+            SalesOrderActorSystem.Start();
 
             disposable = WebApp.Start(ConfigurationManager.AppSettings["ApiUrl"]);
         }
@@ -41,8 +30,8 @@ namespace SalesOrder.Server.Api
         public void Stop()
         {
             disposable.Dispose();
-            actorSystem.Shutdown();
-            actorSystem.AwaitTermination();
+
+            SalesOrderActorSystem.Stop();
         }
     }
 }

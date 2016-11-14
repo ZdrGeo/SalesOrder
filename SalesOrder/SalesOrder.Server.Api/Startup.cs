@@ -5,6 +5,8 @@ using System.Web.Http;
 using Owin;
 
 using Autofac;
+using System.Reflection;
+using Autofac.Integration.WebApi;
 
 namespace SalesOrder.Server.Api
 {
@@ -12,15 +14,13 @@ namespace SalesOrder.Server.Api
     {
         public void Configuration(IAppBuilder appBuilder)
         {
-            /*
             var containerBuilder = new ContainerBuilder();
+
+            containerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             // containerBuilder.RegisterType<SalesOrderService>().As<ISalesOrderService>();
 
             IContainer container = containerBuilder.Build();
-
-            appBuilder.UseAutofacMiddleware(container);
-            */
 
             var httpConfiguration = new HttpConfiguration();
 
@@ -32,6 +32,11 @@ namespace SalesOrder.Server.Api
 
             // httpConfiguration.EnableSystemDiagnosticsTracing();
 
+            httpConfiguration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+
+            appBuilder.UseAutofacMiddleware(container);
+
+            appBuilder.UseAutofacWebApi(httpConfiguration);
             appBuilder.UseWebApi(httpConfiguration);
         }
     }

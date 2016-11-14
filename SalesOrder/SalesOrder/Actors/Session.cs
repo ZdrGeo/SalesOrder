@@ -21,7 +21,7 @@ namespace SalesOrder.Actors
 
         public SessionActor()
         {
-            // SalesOrderCollectionActor = Context.ActorSelection("/SalesOrderCollection").ResolveOne(TimeSpan.FromSeconds(10)).Result;
+            // SalesOrderCollectionActor = Context.ActorSelection("/sales-order-collection").ResolveOne(TimeSpan.FromSeconds(10)).Result;
 
             Receive<CreateSession>(message => CreateSession(message));
             Receive<DestroySession>(message => DestroySession(message));
