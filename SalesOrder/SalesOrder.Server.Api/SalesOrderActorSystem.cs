@@ -11,17 +11,22 @@ using Akka.DI.Core;
 using Akka.DI.AutoFac;
 
 using SalesOrder.Actors;
+using System.Threading;
+using Akka.Cluster;
 
 namespace SalesOrder.Server.Api
 {
     public static class SalesOrderActorSystem
     {
+        private static readonly ManualResetEvent memberRemoved = new ManualResetEvent(false);
         public static ActorSystem ActorSystem { get; private set; }
         // public static IActorRef SalesOrderDistributorActor { get; private set; }
         public static IActorRef SessionRouterActor { get; private set; }
 
         public static void Start()
         {
+            memberRemoved.Reset();
+
             var containerBuilder = new ContainerBuilder();
 
             // containerBuilder.RegisterType<SessionCollectionActor>();
@@ -44,8 +49,20 @@ namespace SalesOrder.Server.Api
                 throw new InvalidOperationException("Actor system is not started.");
             }
 
-            ActorSystem.Shutdown();
-            ActorSystem.AwaitTermination();
+            Cluster cluster = Cluster.Get(ActorSystem);
+
+            cluster.RegisterOnMemberRemoved(
+                async () =>
+                {
+                    await ActorSystem.Terminate();
+
+                    memberRemoved.Set();
+                }
+            );
+
+            cluster.Leave(cluster.SelfAddress);
+
+            memberRemoved.WaitOne();
         }
     }
 }

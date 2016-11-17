@@ -9,16 +9,21 @@ using Akka.DI.AutoFac;
 using Autofac;
 
 using SalesOrder.Client.Actors;
+using System.Threading;
+using Akka.Cluster;
 
 namespace SalesOrder.Client
 {
     public static class SalesOrderActorSystem
     {
+        private static readonly ManualResetEvent memberRemoved = new ManualResetEvent(false);
         public static ActorSystem ActorSystem { get; private set; }
         public static IActorRef SalesOrderBridgeActor { get; private set; }
 
         public static void Start()
         {
+            memberRemoved.Reset();
+
             ContainerBuilder containerBuilder = new ContainerBuilder();
 
             containerBuilder.RegisterType<SalesOrderEventSource>().As<ISalesOrderEventSource>();
@@ -40,8 +45,20 @@ namespace SalesOrder.Client
                 throw new InvalidOperationException("Actor system is not started.");
             }
 
-            ActorSystem.Shutdown();
-            ActorSystem.AwaitTermination();
+            Cluster cluster = Cluster.Get(ActorSystem);
+
+            cluster.RegisterOnMemberRemoved(
+                async () =>
+                {
+                    await ActorSystem.Terminate();
+
+                    memberRemoved.Set();
+                }
+            );
+
+            cluster.Leave(cluster.SelfAddress);
+
+            memberRemoved.WaitOne();
         }
     }
 }

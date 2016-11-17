@@ -17,13 +17,13 @@ namespace SalesOrder.Server
 {
     public static class SalesOrderActorSystem
     {
-        // private static readonly ManualResetEvent clusterLeaved = new ManualResetEvent(false);
+        private static readonly ManualResetEvent memberRemoved = new ManualResetEvent(false);
         public static ActorSystem ActorSystem { get; private set; }
         // public static IActorRef SessionCollectionActor { get; private set; }
 
         public static void Start()
         {
-            //clusterLeaved.Reset();
+            memberRemoved.Reset();
 
             var containerBuilder = new ContainerBuilder();
 
@@ -54,24 +54,20 @@ namespace SalesOrder.Server
                 throw new InvalidOperationException("Actor system is not started.");
             }
 
-            //Cluster cluster = Cluster.Get(ActorSystem);
+            Cluster cluster = Cluster.Get(ActorSystem);
 
-            //cluster.RegisterOnMemberRemoved(
-            //    () =>
-            //    {
-            //        ActorSystem.Shutdown();
-            //        ActorSystem.AwaitTermination();
+            cluster.RegisterOnMemberRemoved(
+                async () =>
+                {
+                    await ActorSystem.Terminate();
 
-            //        clusterLeaved.Set();
-            //    }
-            //);
+                    memberRemoved.Set();
+                }
+            );
 
-            //cluster.Leave(cluster.SelfAddress);
+            cluster.Leave(cluster.SelfAddress);
 
-            //clusterLeaved.WaitOne();
-
-            ActorSystem.Shutdown();
-            ActorSystem.AwaitTermination();
+            memberRemoved.WaitOne();
         }
     }
 }
