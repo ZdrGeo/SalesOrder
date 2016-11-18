@@ -33,7 +33,8 @@ namespace SalesOrder.Actors
 
         private void FindSession(FindSession findSession)
         {
-            logger.Info("Find session (Id: {0})", findSession.SessionId);
+            // logger.Info("Find session (Id: {0})", findSession.SessionId);
+            Console.WriteLine("Find session (Id: {0})", findSession.SessionId);
 
             IActorRef sessionActor = Context.Child($"session-{ findSession.SessionId }");
 

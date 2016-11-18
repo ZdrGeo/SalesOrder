@@ -31,7 +31,8 @@ namespace SalesOrder.Actors
 
         private void CreateSession(CreateSession createSession)
         {
-            logger.Info("Create session (Session Id: {0}, User Id: {1})", createSession.SessionId, createSession.UserId);
+            // logger.Info("Create session (Session Id: {0}, User Id: {1})", createSession.SessionId, createSession.UserId);
+            Console.WriteLine("Create session (Session Id: {0}, User Id: {1})", createSession.SessionId, createSession.UserId);
 
             sessionId = createSession.SessionId;
             userId = createSession.UserId;
@@ -43,7 +44,8 @@ namespace SalesOrder.Actors
 
         private void DestroySession(DestroySession destroySession)
         {
-            logger.Info("Destroy session (Session Id: {0})", sessionId);
+            // logger.Info("Destroy session (Session Id: {0})", sessionId);
+            Console.WriteLine("Destroy session (Session Id: {0})", sessionId);
 
             // ReleaseLock releaseLock = new ReleaseLock(sessionId, Self, ActorRefs.Nobody);
 
