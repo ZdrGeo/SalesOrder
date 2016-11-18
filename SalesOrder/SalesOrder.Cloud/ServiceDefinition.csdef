@@ -11,4 +11,12 @@
       <Setting name="Microsoft.ServiceBus.ConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
+  <WorkerRole name="SalesOrder.Cloud.Server.Api" vmsize="Small">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+    </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Api" protocol="http" port="10100" />
+    </Endpoints>
+  </WorkerRole>
 </ServiceDefinition>

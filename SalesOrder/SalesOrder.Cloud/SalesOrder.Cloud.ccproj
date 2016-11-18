@@ -45,6 +45,14 @@
       <RoleName>SalesOrder.Cloud.Agent</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
+    <ProjectReference Include="..\SalesOrder.Cloud.Server.Api\SalesOrder.Cloud.Server.Api.csproj">
+      <Name>SalesOrder.Cloud.Server.Api</Name>
+      <Project>{c40ce3d9-0123-4502-a0b7-cd72c9c53cbe}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>SalesOrder.Cloud.Server.Api</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\SalesOrder.Cloud.Server\SalesOrder.Cloud.Server.csproj">
       <Name>SalesOrder.Cloud.Server</Name>
       <Project>{5b9e6680-41a8-4ab2-906f-1b54ab8e57ec}</Project>
@@ -56,10 +64,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SalesOrder.Cloud.AgentContent\" />
+    <Folder Include="SalesOrder.Cloud.Server.ApiContent\" />
     <Folder Include="SalesOrder.Cloud.ServerContent\" />
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="SalesOrder.Cloud.AgentContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="SalesOrder.Cloud.Server.ApiContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SalesOrder.Cloud.ServerContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <!-- Import the target files for this project template -->

@@ -19,15 +19,13 @@ namespace SalesOrder.Cloud.Agent
         private const string queueName = "ProcessingQueue";
 
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private readonly ManualResetEvent memberRemoved = new ManualResetEvent(false);
         private readonly ManualResetEvent stopped = new ManualResetEvent(false);
 
-        private ActorSystem actorSystem;
         private QueueClient queueClient;
 
         public override void Run()
         {
-            Trace.WriteLine("SalesOrder.Cloud.Server is running");
+            Trace.WriteLine("SalesOrder.Cloud.Server is running...");
 
             queueClient.OnMessage(message =>
             {
@@ -46,13 +44,13 @@ namespace SalesOrder.Cloud.Agent
 
         public override bool OnStart()
         {
-            Trace.TraceInformation("SalesOrder.Cloud.Agent is stopping");
+            Trace.TraceInformation("SalesOrder.Cloud.Agent is stopping...");
 
-            actorSystem = ActorSystem.Create("sales-order");
+            SalesOrderActorSystem.Start();
 
             ServicePointManager.DefaultConnectionLimit = 12;
 
-            string connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
+            string connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString...");
 
             NamespaceManager namespaceManager = NamespaceManager.CreateFromConnectionString(connectionString);
 
@@ -68,28 +66,15 @@ namespace SalesOrder.Cloud.Agent
 
         public override void OnStop()
         {
-            Trace.TraceInformation("SalesOrder.Cloud.Agent is stopping");
+            Trace.TraceInformation("SalesOrder.Cloud.Agent is stopping...");
 
             cancellationTokenSource.Cancel();
 
+            stopped.Set();
+
             queueClient.Close();
 
-            Cluster cluster = Cluster.Get(actorSystem);
-
-            cluster.RegisterOnMemberRemoved(
-                async () =>
-                {
-                    await actorSystem.Terminate();
-
-                    memberRemoved.Set();
-                }
-            );
-
-            cluster.Leave(cluster.SelfAddress);
-
-            memberRemoved.WaitOne();
-
-            stopped.Set();
+            SalesOrderActorSystem.Stop();
 
             base.OnStop();
         }

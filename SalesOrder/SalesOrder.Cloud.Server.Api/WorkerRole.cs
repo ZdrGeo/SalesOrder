@@ -11,13 +11,15 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using Akka.Actor;
 using Akka.Cluster;
+using Microsoft.Owin.Hosting;
 
-namespace SalesOrder.Cloud.Server
+namespace SalesOrder.Cloud.Server.Api
 {
     public class WorkerRole : RoleEntryPoint
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent stopped = new ManualResetEvent(false);
+        private IDisposable disposable;
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
@@ -29,7 +31,7 @@ namespace SalesOrder.Cloud.Server
 
         public override void Run()
         {
-            Trace.TraceInformation("SalesOrder.Cloud.Server is running...");
+            Trace.TraceInformation("SalesOrder.Cloud.Server.Api is running...");
 
             try
             {
@@ -43,22 +45,28 @@ namespace SalesOrder.Cloud.Server
 
         public override bool OnStart()
         {
-            Trace.TraceInformation("SalesOrder.Cloud.Server is starting...");
+            Trace.TraceInformation("SalesOrder.Cloud.Server.Api is starting...");
 
             SalesOrderActorSystem.Start();
 
             ServicePointManager.DefaultConnectionLimit = 12;
+
+            RoleInstanceEndpoint roleInstanceEndpoint = RoleEnvironment.CurrentRoleInstance.InstanceEndpoints["Api"];
+
+            disposable = WebApp.Start($"{ roleInstanceEndpoint.Protocol }://{ roleInstanceEndpoint.IPEndpoint }");
 
             return base.OnStart();
         }
 
         public override void OnStop()
         {
-            Trace.TraceInformation("SalesOrder.Cloud.Server is stopping...");
+            Trace.TraceInformation("SalesOrder.Cloud.Server.Api is stopping...");
 
             cancellationTokenSource.Cancel();
 
             stopped.WaitOne();
+
+            disposable?.Dispose();
 
             SalesOrderActorSystem.Stop();
 
