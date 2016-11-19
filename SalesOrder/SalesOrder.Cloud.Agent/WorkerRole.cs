@@ -16,7 +16,7 @@ namespace SalesOrder.Cloud.Agent
 {
     public class WorkerRole : RoleEntryPoint
     {
-        private const string queueName = "ProcessingQueue";
+        private const string queueName = "salesorder";
 
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent stopped = new ManualResetEvent(false);
@@ -50,7 +50,7 @@ namespace SalesOrder.Cloud.Agent
 
             ServicePointManager.DefaultConnectionLimit = 12;
 
-            string connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString...");
+            string connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
 
             NamespaceManager namespaceManager = NamespaceManager.CreateFromConnectionString(connectionString);
 

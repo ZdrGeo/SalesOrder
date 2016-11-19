@@ -53,7 +53,7 @@ namespace SalesOrder.Cloud.Server.Api
 
             RoleInstanceEndpoint roleInstanceEndpoint = RoleEnvironment.CurrentRoleInstance.InstanceEndpoints["Api"];
 
-            disposable = WebApp.Start($"{ roleInstanceEndpoint.Protocol }://{ roleInstanceEndpoint.IPEndpoint }");
+            disposable = WebApp.Start<Startup>($"{ roleInstanceEndpoint.Protocol }://{ roleInstanceEndpoint.IPEndpoint }");
 
             return base.OnStart();
         }
