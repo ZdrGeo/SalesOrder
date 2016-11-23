@@ -113,6 +113,7 @@
     <Compile Include="Actors\ClientProcessor.cs" />
     <Compile Include="Actors\Session.cs" />
     <Compile Include="Actors\SessionCollection.cs" />
+    <Compile Include="Actors\TraceLogger.cs" />
     <Compile Include="Messages\RetailSaleProcessDistributor.cs" />
     <Compile Include="Messages\RetailSaleProcessor.cs" />
     <Compile Include="Messages\Commands\Session.cs" />
