@@ -22,8 +22,8 @@ namespace SalesOrder.Actors
     {
         public RetailSaleProcessManagerActor()
         {
-            clientProcessorActor = Context.ActorOf(Context.DI().Props<ClientProcessorActor>(), $"ClientProcessor-{ 0 }");
-            retailSaleProcessorActor = Context.ActorOf(Context.DI().Props<RetailSaleProcessorActor>(), $"RetailSaleProcessor-{ 0 }");
+            clientProcessorActor = Context.ActorOf(Context.DI().Props<ClientProcessorActor>(), $"client-processor-{ 0 }");
+            retailSaleProcessorActor = Context.ActorOf(Context.DI().Props<RetailSaleProcessorActor>(), $"retail-sale-processor-{ 0 }");
 
             Receive<DeliverAtLeastOnce<ProcessRetailSale>>(message => ProcessRetailSale(message));
             Receive<RetailSaleProcessCreated>(message => RetailSaleProcessCreated(message));
@@ -45,7 +45,7 @@ namespace SalesOrder.Actors
 
             string processId = string.Empty;
 
-            IActorRef processActor = Context.ActorOf(Context.DI().Props<RetailSaleProcessActor>(), $"RetailSaleProcess-{ processId }");
+            IActorRef processActor = Context.ActorOf(Context.DI().Props<RetailSaleProcessActor>(), $"retail-sale-process-{ processId }");
 
             CreateProcess(processId, processActor);
         }

@@ -117,7 +117,7 @@ namespace SalesOrder.Actors
 
             string id = string.Empty;
 
-            IActorRef SalesOrderActor = Context.ActorOf(Context.DI().Props<SalesOrderActor>(), $"SalesOrder-{ id }");
+            IActorRef SalesOrderActor = Context.ActorOf(Context.DI().Props<SalesOrderActor>(), $"sales-order-{ id }");
 
             // locks.Add(SalesOrderActor, new Lock(createSalesOrder.SessionActor, DateTime.Now));
 
@@ -132,7 +132,7 @@ namespace SalesOrder.Actors
         {
             logger.Info("Destroy purchase order (ID: {0})", destroySalesOrder.Id);
 
-            IActorRef SalesOrderActor = Context.Child($"SalesOrder-{ destroySalesOrder.Id }");
+            IActorRef SalesOrderActor = Context.Child($"sales-order-{ destroySalesOrder.Id }");
 
             if (SalesOrderActor.IsNobody())
             {

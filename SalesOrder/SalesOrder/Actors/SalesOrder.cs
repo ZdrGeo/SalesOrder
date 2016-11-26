@@ -52,7 +52,7 @@ namespace SalesOrder.Actors
         {
             get
             {
-                return $"SalesOrder-{ Document.Id }";
+                return $"sales-order-{ Document.Id }";
             }
         }
 
