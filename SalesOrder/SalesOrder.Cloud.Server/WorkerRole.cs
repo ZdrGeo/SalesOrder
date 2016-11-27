@@ -21,10 +21,7 @@ namespace SalesOrder.Cloud.Server
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                await Task.Delay(2000);
-            }
+            cancellationToken.WaitHandle.WaitOne();
         }
 
         public override void Run()

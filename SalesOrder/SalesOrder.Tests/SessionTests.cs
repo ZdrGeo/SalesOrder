@@ -14,18 +14,21 @@ namespace SalesOrder.Tests
         [Fact]
         public async Task SessionShouldBeDistributed()
         {
-            IActorRef sessionCollectionActor = ActorOf<SessionCollectionActor>("session-router");
-            
-            for (int index = 0; index < 1000; index++)
-            {
-                string id = $"{ index }";
+            IActorRef sessionRouterActor = ActorOf(Props.Create<SessionCollectionActor>().WithRouter(FromConfig.Instance), "session-router");
 
-                SessionFound sessionFound = await sessionCollectionActor.Ask<SessionFound>(new FindSession(id), TimeSpan.FromSeconds(2));
+            for (int index = 0; index < 10; index++)
+            {
+                string sessionId = $"{ index }";
+                string userId = $"{ index }";
+
+                SessionFound sessionFound = await sessionRouterActor.Ask<SessionFound>(new FindSession(sessionId), TimeSpan.FromSeconds(20));
 
                 if (sessionFound.SessionActor.IsNobody())
                 {
-                    SessionCreated sessionCreated = await sessionCollectionActor.Ask<SessionCreated>(new CreateSession(id, string.Empty), TimeSpan.FromSeconds(2));
+                    SessionCreated sessionCreated = await sessionRouterActor.Ask<SessionCreated>(new CreateSession(sessionId, userId), TimeSpan.FromSeconds(20));
                 }
+
+                // SessionCreated sessionCreated = await sessionRouterActor.Ask<SessionCreated>(new CreateSession(sessionId, userId), TimeSpan.FromSeconds(20));
             }
         }
     }
