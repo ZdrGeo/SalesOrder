@@ -17,27 +17,16 @@ namespace SalesOrder.Cloud.Server.Api
 {
     public class WorkerRole : RoleEntryPoint
     {
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private readonly ManualResetEvent stopped = new ManualResetEvent(false);
+        private readonly ManualResetEvent stop = new ManualResetEvent(false);
+        // private readonly ManualResetEvent stopped = new ManualResetEvent(false);
         private IDisposable disposable;
-
-        private async Task RunAsync(CancellationToken cancellationToken)
-        {
-            cancellationToken.WaitHandle.WaitOne();
-        }
 
         public override void Run()
         {
             Trace.TraceInformation("SalesOrder.Cloud.Server.Api is running...");
 
-            try
-            {
-                RunAsync(cancellationTokenSource.Token).Wait();
-            }
-            finally
-            {
-                stopped.Set();
-            }
+            stop.WaitOne();
+            // stopped.Set();
         }
 
         public override bool OnStart()
@@ -59,9 +48,8 @@ namespace SalesOrder.Cloud.Server.Api
         {
             Trace.TraceInformation("SalesOrder.Cloud.Server.Api is stopping...");
 
-            cancellationTokenSource.Cancel();
-
-            stopped.WaitOne();
+            stop.Set();
+            // stopped.WaitOne();
 
             disposable?.Dispose();
 

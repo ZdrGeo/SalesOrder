@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesOrder.Cloud.Agent", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesOrder.Cloud.Server.Api", "SalesOrder.Cloud.Server.Api\SalesOrder.Cloud.Server.Api.csproj", "{C40CE3D9-0123-4502-A0B7-CD72C9C53CBE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesOrder.Agent", "SalesOrder.Agent\SalesOrder.Agent.csproj", "{4ED30C2D-5FD0-4BFC-B24B-EC17311282CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{C40CE3D9-0123-4502-A0B7-CD72C9C53CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C40CE3D9-0123-4502-A0B7-CD72C9C53CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C40CE3D9-0123-4502-A0B7-CD72C9C53CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ED30C2D-5FD0-4BFC-B24B-EC17311282CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ED30C2D-5FD0-4BFC-B24B-EC17311282CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ED30C2D-5FD0-4BFC-B24B-EC17311282CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ED30C2D-5FD0-4BFC-B24B-EC17311282CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,17 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Autofac;
 using Akka.Actor;
 using Akka.Routing;
-using Akka.DI.Core;
-using Akka.DI.AutoFac;
 
 using SalesOrder.Actors;
 using System.Threading;
 using Akka.Cluster;
 
-namespace SalesOrder.Server.Api
+namespace SalesOrder.Agent
 {
     public static class SalesOrderActorSystem
     {
@@ -26,15 +23,7 @@ namespace SalesOrder.Server.Api
         {
             memberRemoved.Reset();
 
-            var containerBuilder = new ContainerBuilder();
-
-            // containerBuilder.RegisterType<SessionCollectionActor>();
-
-            IContainer container = containerBuilder.Build();
-
             ActorSystem = ActorSystem.Create("sales-order");
-
-            new AutoFacDependencyResolver(container, ActorSystem);
 
             // SessionRouterActor = ActorSystem.ActorOf(ActorSystem.DI().Props<SessionCollectionActor>().WithRouter(FromConfig.Instance), "session-router");
             // SessionRouterActor = ActorSystem.ActorOf(Props.Empty.WithRouter(FromConfig.Instance), "session-router");

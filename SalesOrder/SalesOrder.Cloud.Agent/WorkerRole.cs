@@ -20,54 +20,43 @@ namespace SalesOrder.Cloud.Agent
     {
         private const string queueName = "salesorder";
 
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private readonly ManualResetEvent stopped = new ManualResetEvent(false);
+        private readonly ManualResetEvent stop = new ManualResetEvent(false);
+        // private readonly ManualResetEvent stopped = new ManualResetEvent(false);
 
         private QueueClient queueClient;
 
-        private async Task RunAsync(CancellationToken cancellationToken)
+        private async Task OnMessageAsync(BrokeredMessage message)
         {
-            queueClient.OnMessageAsync(
-                async message =>
+            try
+            {
+                Trace.WriteLine($"Processing: { message.SequenceNumber }, Label: { message.Label }...");
+
+                string sessionId = $"{ message.Properties["SessionId"] }"; // message.SessionId
+                string userId = $"{ message.Properties["UserId"] }";
+
+                SessionFound sessionFound = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionFound>(new FindSession(sessionId), TimeSpan.FromSeconds(20));
+
+                if (sessionFound.SessionActor.IsNobody())
                 {
-                    try
-                    {
-                        Trace.WriteLine($"Processing: { message.SequenceNumber }, Label: { message.Label }...");
-
-                        string sessionId = $"{ message.Properties["SessionId"] }"; // message.SessionId
-                        string userId = $"{ message.Properties["UserId"] }";
-
-                        SessionFound sessionFound = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionFound>(new FindSession(sessionId), TimeSpan.FromSeconds(20));
-
-                        if (sessionFound.SessionActor.IsNobody())
-                        {
-                            SessionCreated sessionCreated = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionCreated>(new CreateSession(sessionId, userId), TimeSpan.FromSeconds(20));
-                        }
-
-                        // SessionCreated sessionCreated = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionCreated>(new CreateSession(sessionId, userId), TimeSpan.FromSeconds(20));
-                    }
-                    catch (Exception exception)
-                    {
-                        Trace.WriteLine(exception);
-                    }
+                    SessionCreated sessionCreated = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionCreated>(new CreateSession(sessionId, userId), TimeSpan.FromSeconds(20));
                 }
-            );
 
-            cancellationToken.WaitHandle.WaitOne();
+                // SessionCreated sessionCreated = await SalesOrderActorSystem.SessionRouterActor.Ask<SessionCreated>(new CreateSession(sessionId, userId), TimeSpan.FromSeconds(20));
+            }
+            catch (Exception exception)
+            {
+                Trace.WriteLine(exception);
+            }
         }
 
         public override void Run()
         {
             Trace.WriteLine("SalesOrder.Cloud.Server is running...");
 
-            try
-            {
-                RunAsync(cancellationTokenSource.Token).Wait();
-            }
-            finally
-            {
-                stopped.Set();
-            }
+            queueClient.OnMessageAsync(OnMessageAsync);
+
+            stop.WaitOne();
+            // stopped.Set();
         }
 
         public override bool OnStart()
@@ -96,9 +85,8 @@ namespace SalesOrder.Cloud.Agent
         {
             Trace.TraceInformation("SalesOrder.Cloud.Agent is stopping...");
 
-            cancellationTokenSource.Cancel();
-
-            stopped.WaitOne();
+            stop.Set();
+            // stopped.WaitOne();
 
             queueClient.Close();
 

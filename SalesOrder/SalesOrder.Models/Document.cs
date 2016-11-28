@@ -10,13 +10,14 @@ namespace SalesOrder.Models
     {
         public string Id { get; set; }
         public string Number { get; set; }
+        public string ProductCode { get; set; }
+        public decimal Quantity { get; set; }
     }
 
     public class Document
     {
-        private List<Line> lines = new List<Line>();
         public string Id { get; set; }
         public string Number { get; set; }
-        public IList<Line> Lines => lines;
+        public IList<Line> Lines { get; } = new List<Line>();
     }
 }
