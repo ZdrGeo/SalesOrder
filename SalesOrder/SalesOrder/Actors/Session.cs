@@ -37,7 +37,7 @@ namespace SalesOrder.Actors
             sessionId = createSession.SessionId;
             userId = createSession.UserId;
 
-            SessionCreated sessionCreated = new SessionCreated(createSession.SessionId, Self);
+            var sessionCreated = new SessionCreated(createSession.SessionId, Self);
 
             Sender.Tell(sessionCreated);
         }
@@ -47,13 +47,13 @@ namespace SalesOrder.Actors
             logger.Info("Destroy session (Session Id: {0})", sessionId);
             // Console.WriteLine("Destroy session (Session Id: {0})", sessionId);
 
-            // ReleaseLock releaseLock = new ReleaseLock(sessionId, Self, ActorRefs.Nobody);
+            // var releaseLock = new ReleaseLock(sessionId, Self, ActorRefs.Nobody);
 
             // SalesOrderCollectionActor.Tell(releaseLock);
 
             if (!Sender.IsNobody())
             {
-                SessionDestroyed sessionDestroyed = new SessionDestroyed(sessionId);
+                var sessionDestroyed = new SessionDestroyed(sessionId);
 
                 Sender.Tell(sessionDestroyed);
             }
@@ -63,7 +63,7 @@ namespace SalesOrder.Actors
 
         protected override void PreStart()
         {
-            DestroySession destroySession = new DestroySession();
+            var destroySession = new DestroySession();
 
             cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(20), Self, destroySession, ActorRefs.Nobody);
 

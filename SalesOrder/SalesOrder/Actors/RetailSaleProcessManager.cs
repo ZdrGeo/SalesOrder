@@ -54,28 +54,28 @@ namespace SalesOrder.Actors
         {
             string name = string.Empty;
 
-            CreateClient createClient = new CreateClient(retailSaleProcessCreated.ProcessActor, name);
+            var createClient = new CreateClient(retailSaleProcessCreated.ProcessActor, name);
 
             clientProcessorActor.Tell(createClient);
         }
 
         private void ClientCreated(ClientCreated clientCreated)
         {
-            StoreClient storeClient = new StoreClient(clientCreated.Id);
+            var storeClient = new StoreClient(clientCreated.Id);
 
             clientCreated.ProcessActor.Tell(storeClient);
         }
 
         private void ClientStored(ClientStored clientStored)
         {
-            // CreateRetailSale createRetailSale = new CreateRetailSale(clientStored.ProcessActor);
+            // var createRetailSale = new CreateRetailSale(clientStored.ProcessActor);
 
             // retailSaleProcessorActor.Tell(createRetailSale);
         }
 
         private void RetailSaleCreated(RetailSaleCreated retailSaleCreated)
         {
-            StoreRetailSale storeRetailSale = new StoreRetailSale(retailSaleCreated.Id);
+            var storeRetailSale = new StoreRetailSale(retailSaleCreated.Id);
 
             retailSaleCreated.ProcessActor.Tell(storeRetailSale);
         }
@@ -89,7 +89,7 @@ namespace SalesOrder.Actors
         {
             string retailSaleId = string.Empty;
 
-            CreateRetailSaleProcess createRetailSaleProcess = new CreateRetailSaleProcess(retailSaleId);
+            var createRetailSaleProcess = new CreateRetailSaleProcess(retailSaleId);
 
             actor.Tell(createRetailSaleProcess);
         }

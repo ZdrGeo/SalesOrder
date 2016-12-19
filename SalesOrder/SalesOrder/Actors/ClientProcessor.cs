@@ -36,7 +36,7 @@ namespace SalesOrder.Actors
 
             string id = clientProcessorService.Create(null);
 
-            ClientCreated clientCreated = new ClientCreated(createClient.ProcessActor, id);
+            var clientCreated = new ClientCreated(createClient.ProcessActor, id);
 
             Sender.Tell(clientCreated);
         }

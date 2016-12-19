@@ -36,7 +36,7 @@ namespace SalesOrder.Actors
 
             string id = retailSaleProcessorService.Create(null);
 
-            RetailSaleCreated retailSaleCreated = new RetailSaleCreated(createRetailSale.ProcessActor, id);
+            var retailSaleCreated = new RetailSaleCreated(createRetailSale.ProcessActor, id);
 
             Sender.Tell(retailSaleCreated);
         }

@@ -200,7 +200,7 @@ namespace SalesOrder.Services.Atlas
 
             A_Clients a_clients = UnitOfWork.A_Clients.First(a_c => a_c.FirmID == firmId && a_c.ClientID == clientId);
 
-            Client client = new Client();
+            Client client = new Client(null, null);
 
             return client;
         }
@@ -280,7 +280,7 @@ namespace SalesOrder.Services.Atlas
         {
             EnsureEnlisted();
 
-            Client client = new Client();
+            Client client = null;
 
             short firmId = 1;
             int clientId = int.Parse(id);

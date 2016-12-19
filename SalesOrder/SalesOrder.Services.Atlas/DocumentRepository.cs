@@ -32,7 +32,7 @@ namespace SalesOrder.Services.Atlas
 
             ST_CDocs ST_CDocs = UnitOfWork.ST_CDocs.First(st_cd => st_cd.FirmID == firmId && st_cd.BranchID == branchId && st_cd.DocID == docId);
 
-            Document document = new Document();
+            var document = new Document();
 
             return document;
         }
@@ -67,7 +67,7 @@ namespace SalesOrder.Services.Atlas
 
             int docId = int.Parse(document.Id);
 
-            ST_CDocs st_CDocs = new ST_CDocs();
+            var st_CDocs = new ST_CDocs();
 
             st_CDocs.FirmID = 1;
             st_CDocs.BranchID = 1;

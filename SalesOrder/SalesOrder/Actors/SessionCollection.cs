@@ -38,7 +38,7 @@ namespace SalesOrder.Actors
 
             IActorRef sessionActor = Context.Child($"session-{ findSession.SessionId }");
 
-            SessionFound sessionFound = new SessionFound(findSession.SessionId, sessionActor);
+            var sessionFound = new SessionFound(findSession.SessionId, sessionActor);
 
             Sender.Tell(sessionFound);
         }

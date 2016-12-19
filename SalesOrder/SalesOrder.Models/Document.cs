@@ -10,7 +10,7 @@ namespace SalesOrder.Models
     {
         public string Id { get; set; }
         public string Number { get; set; }
-        public string ProductCode { get; set; }
+        public string ProductId { get; set; }
         public decimal Quantity { get; set; }
     }
 

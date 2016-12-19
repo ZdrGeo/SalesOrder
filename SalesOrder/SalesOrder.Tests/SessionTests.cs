@@ -11,7 +11,7 @@ namespace SalesOrder.Tests
 {
     public class SessionTests : TestKit
     {
-        [Fact]
+        [Fact(Skip = "Not ready to run in cluster")]
         public async Task SessionShouldBeDistributed()
         {
             IActorRef sessionRouterActor = ActorOf(Props.Create<SessionCollectionActor>().WithRouter(FromConfig.Instance), "session-router");

@@ -67,7 +67,7 @@ namespace SalesOrder.Actors
 
         private void CreateRetailSaleProcess(CreateRetailSaleProcess createRetailSaleProcess)
         {
-            RetailSaleProcessCreated retailSaleProcessCreated = new RetailSaleProcessCreated(Self);
+            var retailSaleProcessCreated = new RetailSaleProcessCreated(Self);
 
             Persist(retailSaleProcessCreated, @event => {
                 RetailSaleProcessCreated(@event);
@@ -78,7 +78,7 @@ namespace SalesOrder.Actors
 
         private void StoreClient(StoreClient storeClient)
         {
-            ClientStored clientStored = new ClientStored(storeClient.Id);
+            var clientStored = new ClientStored(storeClient.Id);
 
             Persist(clientStored, @event => {
                 ClientStored(@event);
@@ -89,7 +89,7 @@ namespace SalesOrder.Actors
 
         private void StoreRetailSale(StoreRetailSale storeRetailSale)
         {
-            RetailSaleStored retailSaleStored = new RetailSaleStored(storeRetailSale.Id);
+            var retailSaleStored = new RetailSaleStored(storeRetailSale.Id);
 
             Persist(retailSaleStored, @event => {
                 RetailSaleStored(@event);

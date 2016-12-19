@@ -70,9 +70,9 @@ namespace SalesOrder.Actors
         {
             logger.Info("Create purchase order (Id: {0})", createSalesOrder.Id);
 
-            SalesOrderCreated SalesOrderCreated = new SalesOrderCreated(createSalesOrder.Id, createSalesOrder.Number);
+            var salesOrderCreated = new SalesOrderCreated(createSalesOrder.Id, createSalesOrder.Number);
 
-            Persist(SalesOrderCreated, @event => {
+            Persist(salesOrderCreated, @event => {
                 this.SalesOrderCreated(@event);
                 SaveSnapshot();
                 // Sender.Tell(SalesOrderCreated);
@@ -83,9 +83,9 @@ namespace SalesOrder.Actors
         {
             logger.Info("Destroy purchase order (Id: {0})", destroySalesOrder.Id);
 
-            SalesOrderDestroyed SalesOrderDestroyed = new SalesOrderDestroyed(Document.Id);
+            var salesOrderDestroyed = new SalesOrderDestroyed(Document.Id);
 
-            Persist(SalesOrderDestroyed, @event => {
+            Persist(salesOrderDestroyed, @event => {
                 this.SalesOrderDestroyed(@event);
                 SaveSnapshot();
                 // Sender.Tell(SalesOrderDestroyed);
@@ -98,9 +98,9 @@ namespace SalesOrder.Actors
 
             string id = string.Empty;
 
-            SalesOrderLineAdded SalesOrderLineAdded = new SalesOrderLineAdded(id, addSalesOrderLine.Number);
+            var salesOrderLineAdded = new SalesOrderLineAdded(id, addSalesOrderLine.Number);
 
-            Persist(SalesOrderLineAdded, @event => {
+            Persist(salesOrderLineAdded, @event => {
                 this.SalesOrderLineAdded(@event);
                 SaveSnapshot();
                 // Sender.Tell(SalesOrderLineAdded);
@@ -111,12 +111,12 @@ namespace SalesOrder.Actors
         {
             logger.Info("Remove purchase order line (ID: {0})", removeSalesOrderLine.Id);
 
-            SalesOrderLineRemoved SalesOrderLineRemoved = new SalesOrderLineRemoved(removeSalesOrderLine.Id);
+            var salesOrderLineRemoved = new SalesOrderLineRemoved(removeSalesOrderLine.Id);
 
-            Persist(SalesOrderLineRemoved, @event => {
+            Persist(salesOrderLineRemoved, @event => {
                 this.SalesOrderLineRemoved(@event);
                 SaveSnapshot();
-                // Sender.Tell(SalesOrderLineAdded);
+                // Sender.Tell(salesOrderLineAdded);
             });
         }
 
@@ -133,7 +133,7 @@ namespace SalesOrder.Actors
 
         private void SalesOrderLineAdded(SalesOrderLineAdded SalesOrderLineAdded)
         {
-            Line line = new Line();
+            var line = new Line();
 
             line.Id = SalesOrderLineAdded.Id;
             line.Number = SalesOrderLineAdded.Number;

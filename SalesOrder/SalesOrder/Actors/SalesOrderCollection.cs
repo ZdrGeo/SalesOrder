@@ -46,7 +46,7 @@ namespace SalesOrder.Actors
                 }
                 else
                 {
-                    Dictionary<IActorRef, bool> sessionActors = new Dictionary<IActorRef, bool>();
+                    var sessionActors = new Dictionary<IActorRef, bool>();
 
                     sessionActors.Add(sessionActor, true);
 
@@ -123,9 +123,9 @@ namespace SalesOrder.Actors
 
             SalesOrderActor.Forward(createSalesOrder);
 
-            SalesOrderCreated SalesOrderCreated = new SalesOrderCreated(id, createSalesOrder.Number);
+            var salesOrderCreated = new SalesOrderCreated(id, createSalesOrder.Number);
 
-            Sender.Tell(SalesOrderCreated);
+            Sender.Tell(salesOrderCreated);
         }
 
         private void DestroySalesOrder(DestroySalesOrder destroySalesOrder)
@@ -143,9 +143,9 @@ namespace SalesOrder.Actors
 
             // locks.Remove(SalesOrderActor);
 
-            SalesOrderDestroyed SalesOrderDestroyed = new SalesOrderDestroyed(destroySalesOrder.Id);
+            var salesOrderDestroyed = new SalesOrderDestroyed(destroySalesOrder.Id);
 
-            Sender.Tell(SalesOrderDestroyed);
+            Sender.Tell(salesOrderDestroyed);
         }
 
         private void ReleaseLock(ReleaseLock releaseLock)
@@ -162,7 +162,7 @@ namespace SalesOrder.Actors
 
         protected override void PreStart()
         {
-            ReleaseLocks releaseLocks = new ReleaseLocks(string.Empty, ActorRefs.Nobody);
+            var releaseLocks = new ReleaseLocks(string.Empty, ActorRefs.Nobody);
 
             cancelable = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(20), Self, releaseLocks, Self);
 

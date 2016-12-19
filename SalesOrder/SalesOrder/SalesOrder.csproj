@@ -48,23 +48,23 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Akka.Persistence.Redis, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Akka.Persistence.Redis.0.2.0-beta\lib\net45\Akka.Persistence.Redis.dll</HintPath>
+      <HintPath>..\packages\Akka.Persistence.Redis.0.2.6-beta\lib\net45\Akka.Persistence.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Akka.Persistence.Sql.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Akka.Persistence.Sql.Common.1.1.1.28-beta\lib\net45\Akka.Persistence.Sql.Common.dll</HintPath>
+      <HintPath>..\packages\Akka.Persistence.Sql.Common.1.1.2.30-beta\lib\net45\Akka.Persistence.Sql.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Akka.Persistence.SqlServer, Version=1.1.1.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Akka.Persistence.SqlServer.1.1.1.5-beta\lib\net45\Akka.Persistence.SqlServer.dll</HintPath>
+    <Reference Include="Akka.Persistence.SqlServer, Version=1.1.1.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.Persistence.SqlServer.1.1.1.7-beta\lib\net45\Akka.Persistence.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Akka.Remote, Version=1.1.2.29, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Akka.Remote.1.1.2\lib\net45\Akka.Remote.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Autofac, Version=4.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.4.2.0\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=4.2.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.2.1\lib\net45\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.ProtocolBuffers, Version=2.4.1.555, Culture=neutral, PublicKeyToken=55f7125234beb589, processorArchitecture=MSIL">
@@ -102,6 +102,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actors\AvailabilityQuoteScheduler.cs" />
+    <Compile Include="Actors\AvailabilityQuoteAgent.cs" />
     <Compile Include="Actors\RetailSaleProcessor.cs" />
     <Compile Include="Actors\SalesOrder.cs" />
     <Compile Include="Actors\SalesOrderCollection.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="Actors\Session.cs" />
     <Compile Include="Actors\SessionCollection.cs" />
     <Compile Include="Actors\TraceLogger.cs" />
+    <Compile Include="Messages\AvailabilityQuote.cs" />
     <Compile Include="Messages\RetailSaleProcessDistributor.cs" />
     <Compile Include="Messages\RetailSaleProcessor.cs" />
     <Compile Include="Messages\Commands\Session.cs" />

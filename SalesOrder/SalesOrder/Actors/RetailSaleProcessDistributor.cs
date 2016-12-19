@@ -25,6 +25,7 @@ namespace SalesOrder.Actors
             // actor = Context.ActorOf<>();
 
             Command<DistributeRetailSaleProcess>(command => DistributeRetailSaleProcess(command));
+
             Command<AtLeastOnceDelivered>(command => AtLeastOnceDelivered(command));
             Command<SaveSnapshotSuccess>(command => SaveSnapshotSuccess(command));
             Command<SaveSnapshotFailure>(command => SaveSnapshotFailure(command));
@@ -46,9 +47,9 @@ namespace SalesOrder.Actors
 
         private void DistributeRetailSaleProcess(DistributeRetailSaleProcess distributeRetailSaleProcess)
         {
-            // Deliver(actor.Path, deliveryId => new DeliverAtLeastOnce<DistributeRetailSaleProcess>(deliveryId, distributeRetailSale));
+            Deliver(actor.Path, deliveryId => new DeliverAtLeastOnce<DistributeRetailSaleProcess>(deliveryId, distributeRetailSaleProcess));
 
-            // SaveSnapshot(GetDeliverySnapshot());
+            SaveSnapshot(GetDeliverySnapshot());
 
             var retailSaleProcessDistributed = new RetailSaleProcessDistributed(distributeRetailSaleProcess.RetailSaleId);
 
