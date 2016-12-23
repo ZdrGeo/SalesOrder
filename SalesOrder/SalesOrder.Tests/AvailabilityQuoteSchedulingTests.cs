@@ -12,29 +12,37 @@ namespace SalesOrder.Tests
     public class AvailabilityQuoteSchedulingTests : TestKit
     {
         public AvailabilityQuoteSchedulingTests() : base (@"
-          akka.persistence {
-            journal {
-              plugin = ""akka.persistence.journal.sql-server""
-              sql-server {
-                class = ""Akka.Persistence.SqlServer.Journal.SqlServerJournal, Akka.Persistence.SqlServer""
-                schema-name = dbo
-                auto-initialize = on
-                connection-string = ""Data Source=BERILLIUM;Initial Catalog=Atlas;Integrated Security=True""
+          akka {
+              actor {
+              serializers {
+                wire = ""Akka.Serialization.WireSerializer, Akka.Serialization.Wire""
+              }
+              serialization-bindings {
+                ""System.Object"" = wire
               }
             }
-
-            snapshot-store {
-              plugin = ""akka.persistence.snapshot-store.sql-server""
-              sql-server {
-                class = ""Akka.Persistence.SqlServer.Snapshot.SqlServerSnapshotStore, Akka.Persistence.SqlServer""
-                schema-name = dbo
-                auto-initialize = on
-                connection-string = ""Data Source=BERILLIUM;Initial Catalog=Atlas;Integrated Security=True""
+            persistence {
+              journal {
+                plugin = ""akka.persistence.journal.sql-server""
+                sql-server {
+                  class = ""Akka.Persistence.SqlServer.Journal.SqlServerJournal, Akka.Persistence.SqlServer""
+                  schema-name = dbo
+                  auto-initialize = on
+                  connection-string = ""Data Source=BERILLIUM;Initial Catalog=Atlas;Integrated Security=True""
+                }
               }
-            }
-
-            at-least-once-delivery {
-              redeliver-interval = 5
+              snapshot-store {
+                plugin = ""akka.persistence.snapshot-store.sql-server""
+                sql-server {
+                  class = ""Akka.Persistence.SqlServer.Snapshot.SqlServerSnapshotStore, Akka.Persistence.SqlServer""
+                  schema-name = dbo
+                  auto-initialize = on
+                  connection-string = ""Data Source=BERILLIUM;Initial Catalog=Atlas;Integrated Security=True""
+                }
+              }
+              at-least-once-delivery {
+                redeliver-interval = 5
+              }
             }
           }
         ") { }
